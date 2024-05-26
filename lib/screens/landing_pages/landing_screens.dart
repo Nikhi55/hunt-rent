@@ -34,7 +34,7 @@ class _LandingScreensState extends State<LandingScreens> {
             alignment: Alignment.topCenter,
             child: Container(
               // padding: EdgeInsets.only(top: height * 0.1),
-              height: height * 0.47,
+              height: height * 0.53,
               child: PageView(
                 controller: pageController,
                 onPageChanged: (page) {
@@ -44,9 +44,9 @@ class _LandingScreensState extends State<LandingScreens> {
                 children: [
                   getAssetImage(
                     R.images.landing01,
-                    width: width,
-                    height: height * 0.15,
-                    boxFit: BoxFit.contain,
+                    // width: width,
+                    // height: height * ,
+                    boxFit: BoxFit.cover,
                   ),
                   getAssetImage(
                     R.images.landing02,
@@ -66,128 +66,105 @@ class _LandingScreensState extends State<LandingScreens> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: ClipPath(
-              clipper: TopWaveClipper(),
+            child: CustomPaint(
+              painter: CurvePainter(),
+              size: Size(double.infinity, double.infinity),
               child: Container(
                 margin: EdgeInsets.all(FetchPixels.getPixelHeight(10)),
                 padding: EdgeInsets.all(FetchPixels.getPixelHeight(30)),
-                height: FetchPixels.getPixelHeight(450),
-                // decoration: BoxDecoration(
-                //   gradient: LinearGradient(
-                //     begin: Alignment.topCenter,
-                //     end: Alignment.bottomCenter,
-                // colors: [R.colors.g1.withOpacity(0.1), R.colors.theme1],
-                //   ),
-                // ),
-
-                // gradient: LinearGradient(
-                //   begin: Alignment.topCenter,
-                //   end: Alignment.bottomCenter,
-                //   colors: [
-                //     R.colors.g1.withOpacity(0.1),
-                //     R.colors.theme1,
-                //   ],
-                // ),
-
-                color: R.colors.theme, // Use your desired color
-
+                height: FetchPixels.getPixelHeight(950),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // getVerSpace(FetchPixels.getPixelHeight(10)),
-
+                    // Text Widget moved here directly inside the Column
                     Container(
                       padding: EdgeInsets.only(
-                        top: FetchPixels.getPixelHeight(20),
-                        bottom: FetchPixels.getPixelHeight(40),
+                        bottom: FetchPixels.getPixelHeight(20),
                       ),
-                      alignment: Alignment.topCenter,
-                      height: FetchPixels.getPixelHeight(200),
-                      width: FetchPixels.getPixelWidth(400),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              currentPage == 0
-                                  ? "Own Your Style!\nNot your Wardrobe! "
-                                  : currentPage == 1
-                                      ? "Unleash your Glamour!"
-                                      : currentPage == 2
-                                          ? "Rent. Return .Redefine!"
-                                          : "Unlock the Joy,\nJust Rent and Enjoy!",
-                              textAlign: TextAlign.start,
-                              style: R.textStyle.semiBoldMetropolis().copyWith(
-                                    fontSize: FetchPixels.getPixelHeight(25),
-                                    color: R.colors.whiteColor,
-                                  ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        currentPage == 0
+                            ? "Own your Style!"
+                            : currentPage == 1
+                                ? "Elevate your Fashion!"
+                                : currentPage == 2
+                                    ? "Affordable Luxury Awaits!"
+                                    : "Rent or Buy - Your\nFashion, Your Way",
+                        textAlign: TextAlign.start,
+                        style: R.textStyle.mediumMetropolis().copyWith(
+                              fontSize: FetchPixels.getPixelHeight(25),
+                              color: R.colors.whiteColor,
                             ),
-                          ),
-                          getVerSpace(30),
-                          Expanded(
-                            child: Text(
-                              currentPage == 0
-                                  ? "Access quality clothing without the commitment of owning. "
-                                  : currentPage == 1
-                                      ? "Fashion should be accessible to everyone.\nStay on-trend without the commitment of ownership."
-                                      : currentPage == 2
-                                          ? "Effortlessly stay in touch with the latest fashion trends without the need for long-term ownership. "
-                                          : "Discover our extensive collection of fashionable clothing, shoes, and accessories that are now available for rent. ",
-                              textAlign: TextAlign.start,
-                              style: R.textStyle.mediumMetropolis().copyWith(
-                                    fontSize: FetchPixels.getPixelHeight(16),
-                                    color: R.colors.whiteColor,
-                                  ),
-                            ),
-                          )
-                        ],
                       ),
                     ),
 
-                    SizedBox(
-                      height: FetchPixels.getPixelHeight(70),
-                      width: FetchPixels.getPixelWidth(300),
-                      child: Row(
-                        mainAxisAlignment: currentPage == 3
-                            ? MainAxisAlignment.spaceEvenly
-                            : MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: List.generate(
-                              4,
-                              (index) => Container(
-                                margin: EdgeInsets.only(right: 5),
-                                height: currentPage == index
-                                    ? height * 0.04
-                                    : height * 0.03,
-                                width: currentPage == index
-                                    ? width * 0.04
-                                    : width * 0.03,
-                                decoration: BoxDecoration(
-                                  // borderRadius: BorderRadius.circular(10),
-                                  shape: BoxShape.rectangle,
-                                  color: R.colors.whiteColor,
+                    // Dots and Button Row
+                    currentPage == 3
+                        ? Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                                vertical: FetchPixels.getPixelHeight(20)),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Get.offAllNamed(Routes.userTypeView);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    R.colors.bgColor, // Background color
+                                padding: EdgeInsets.all(
+                                    FetchPixels.getPixelHeight(15)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
+                              child: Text(
+                                "Get Started",
+                                style: R.textStyle.mediumMetropolis().copyWith(
+                                      fontSize: FetchPixels.getPixelHeight(18),
+                                      color: R.colors.blackColor,
+                                    ),
+                              ),
                             ),
-                          ),
-                          currentPage == 3
-                              ? InkWell(
-                                  onTap: () {
-                                    print(currentPage);
-                                    if (currentPage <= 2) {
-                                      currentPage = currentPage + 1;
+                          )
+                        : SizedBox(
+                            height: FetchPixels.getPixelHeight(120),
+                            width: FetchPixels.getPixelWidth(300),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    4,
+                                    (index) => Container(
+                                      margin: EdgeInsets.only(right: 5),
+                                      height: currentPage == index
+                                          ? height * 0.04
+                                          : height * 0.03,
+                                      width: currentPage == index
+                                          ? width * 0.04
+                                          : width * 0.03,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: R.colors.whiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                    width:
+                                        20), // Add some space between dots and button
+                                IconButton(
+                                  onPressed: () {
+                                    if (currentPage < 3) {
+                                      currentPage += 1;
                                       pageController.animateToPage(currentPage,
                                           duration: Duration(milliseconds: 300),
                                           curve: Curves.ease);
                                       setState(() {});
-                                    } else {
-                                      Get.offAllNamed(Routes.userTypeView);
                                     }
                                   },
-                                  child: Container(
+                                  icon: Container(
                                     height: height * 0.06,
                                     width: width * 0.15,
                                     decoration: BoxDecoration(
@@ -201,10 +178,9 @@ class _LandingScreensState extends State<LandingScreens> {
                                     ),
                                   ),
                                 )
-                              : SizedBox(),
-                        ],
-                      ),
-                    ),
+                              ],
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -216,48 +192,32 @@ class _LandingScreensState extends State<LandingScreens> {
   }
 }
 
-class TopWaveClipper extends CustomClipper<Path> {
+class CurvePainter extends CustomPainter {
   @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(
-        0, size.height * 0.15); // Start slightly below the top-left corner
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = R.colors.theme
+      ..style = PaintingStyle.fill;
 
-    // // Define control points and end points to create the wave
-    // var firstControlPoint = Offset(size.width * 0.25,
-    //     size.height * 0.05); // Control point for the first curve
-    // var firstEndPoint = Offset(
-    //     size.width * 0.5, size.height * 0.15); // End point for the first curve
+    final path = Path();
+    final controlPoint1 = Offset(size.width / 4, size.height * 0.9);
+    final controlPoint2 = Offset(size.width * 1.3, size.height * 0.40);
 
-    // var secondControlPoint = Offset(size.width * 0.75,
-    //     size.height * 0.25); // Control point for the second curve
-    // var secondEndPoint = Offset(
-    //     size.width, size.height * 0.15); // End point for the second curve
-
-    // // Create the quadratic Bezier curve
-    // path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-    //     firstEndPoint.dx, firstEndPoint.dy);
-    // path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-    //     secondEndPoint.dx, secondEndPoint.dy);
-
-    // path.lineTo(size.width, 0); // Go to the top-right corner
-    // path.lineTo(0, 0); // Go to the top-left corner
-    // path.close(); // Close the path
-
+    path.moveTo(0, size.height / 2.5); // Start from center-left
     path.cubicTo(
-      size.width / 4,
-      3 * (size.height / 2),
-      3 * (size.width / 4),
-      size.height / 2,
-      size.width,
-      size.height * 0.9,
+      controlPoint1.dx,
+      controlPoint1.dy,
+      controlPoint2.dx,
+      controlPoint2.dy,
+      size.width, // End at bottom-right
+      size.height,
     );
+    path.lineTo(0, size.height); // Draw line from bottom-right to bottom-left
+    path.close();
 
-    path.lineTo(size.width, 0);
-
-    return path;
+    canvas.drawPath(path, paint);
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

@@ -28,6 +28,7 @@ class AppImages {
   String lines = 'lines.png';
   String bannerImage = 'bannerImage.png';
   String bannerImageNew = 'bannerImageNew.png';
+  String curveImg = 'curve.png';
 
   String subC1 = 'subC1.png';
   String featured1 = 'featured1.png';

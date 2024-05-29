@@ -10,6 +10,7 @@ import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/model/product_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
 import 'package:hunt_and_rent/utils/validator.dart';
+import 'package:hunt_and_rent/widgets/datePickerService.dart';
 import 'package:hunt_and_rent/widgets/table_calender.dart';
 import 'package:provider/provider.dart';
 
@@ -677,119 +678,124 @@ class _AddProductFormState extends State<AddProductForm> {
                   ),
 
                   getVerSpace(FetchPixels.getPixelHeight(20)),
-                  // rentCT.text == "sell"
-                  //     ? SizedBox()
-                  //     : Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text(
-                  //             "Rent For:",
-                  //             style: R.textStyle.mediumMetropolis().copyWith(
-                  //                 fontSize: FetchPixels.getPixelHeight(16)),
-                  //           ),
-                  //           // getVerSpace(FetchPixels.getPixelHeight(5)),
-                  //           // InkWell(
-                  //           //   onTap: (){
-                  //           //     DateTimePickerServices.selectDateFunction(
-                  //           //         DateTime.now(),
-                  //           //         DateTime.now(),
-                  //           //         DateTime(2050),
-                  //           //         context,
-                  //           //         selectDateTC);
-                  //           //   },
-                  //           //   child: TextFormField(
-                  //           //     style: R.textStyle.regularMetropolisItalic(),
-                  //           //     validator: (value) =>
-                  //           //         FieldValidator.validateEmptyField(value),
-                  //           //     controller: selectDateTC,
-                  //           //     enabled: false,
-                  //           //     textInputAction: TextInputAction.next,
-                  //           //     keyboardType: TextInputType.text,
-                  //           //     decoration: R.decorations
-                  //           //         .textFormFieldDecoration(null, "Enter Date..",suffix: Icon(Icons.calendar_today_outlined,color: R.colors.theme,)),
-                  //           //   ),
-                  //           // ),
-                  //           SizedBox(height: FetchPixels.getPixelHeight(5)),
-                  //           SizedBox(
-                  //             height: FetchPixels.getPixelHeight(60),
-                  //             child: ListView(
-                  //               scrollDirection: Axis.horizontal,
-                  //               children: [
-                  //                 Row(
-                  //                   children: List.generate(4, (index) {
-                  //                     return InkWell(
-                  //                         onTap: () {
-                  //                           auth.selectedDays = index;
-                  //                           auth.datesTimes = DateTime.now();
-                  //                           auth.update();
-                  //                           auth.datesTimes = auth.datesTimes
-                  //                               .add(Duration(
-                  //                                   days: dates[index]));
-                  //                           auth.startDate = DateTime.now();
-                  //                           auth.endDate = auth.datesTimes;
-                  //                           auth.update();
-                  //                           print(
-                  //                               "This is the start date: ${auth.startDate}");
-                  //                           print(
-                  //                               "This is the end date: ${auth.endDate}");
-                  //                         },
-                  //                         child: Container(
-                  //                           padding: EdgeInsets.symmetric(
-                  //                               horizontal:
-                  //                                   FetchPixels.getPixelWidth(
-                  //                                       15),
-                  //                               vertical:
-                  //                                   FetchPixels.getPixelHeight(
-                  //                                       8)),
-                  //                           margin: EdgeInsets.all(
-                  //                               FetchPixels.getPixelHeight(5)),
-                  //                           decoration: BoxDecoration(
-                  //                             borderRadius:
-                  //                                 BorderRadius.circular(
-                  //                                     FetchPixels
-                  //                                         .getPixelHeight(5)),
-                  //                             color: auth.selectedDays == index
-                  //                                 ? R.colors.theme
-                  //                                 : R.colors.whiteColor,
-                  //                           ),
-                  //                           child: Center(
-                  //                             child: Text(
-                  //                               "${dates[index]} Days",
-                  //                               style: R.textStyle
-                  //                                   .mediumMetropolis()
-                  //                                   .copyWith(
-                  //                                     fontSize: FetchPixels
-                  //                                         .getPixelHeight(16),
-                  //                                     color:
-                  //                                         auth.selectedDays ==
-                  //                                                 index
-                  //                                             ? R.colors
-                  //                                                 .whiteColor
-                  //                                             : R.colors
-                  //                                                 .blackColor,
-                  //                                   ),
-                  //                             ),
-                  //                           ),
-                  //                         ));
-                  //                   }),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           SizedBox(height: FetchPixels.getPixelHeight(10)),
-                  //           SizedBox(
-                  //               height: FetchPixels.getPixelHeight(450),
-                  //               child: CalendarScreen()),
-                  //           // getVerSpace(FetchPixels.getPixelHeight(10)),
-                  //         ],
-                  //       ),
-                  // Text(
-                  //   "Description:",
-                  //   style: R.textStyle
-                  //       .mediumMetropolis()
-                  //       .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
-                  // ),
-                  // getVerSpace(FetchPixels.getPixelHeight(5)),
+                  rentCT.text == "sell"
+                      ? SizedBox()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Rent For:",
+                              style: R.textStyle.mediumMetropolis().copyWith(
+                                  fontSize: FetchPixels.getPixelHeight(16)),
+                            ),
+                            getVerSpace(FetchPixels.getPixelHeight(5)),
+                            InkWell(
+                              onTap: () {
+                                DateTimePickerServices.selectDateFunction(
+                                    DateTime.now(),
+                                    DateTime.now(),
+                                    DateTime(2050),
+                                    context,
+                                    selectDateTC);
+                              },
+                              child: TextFormField(
+                                style: R.textStyle.regularMetropolisItalic(),
+                                validator: (value) =>
+                                    FieldValidator.validateEmptyField(value),
+                                controller: selectDateTC,
+                                enabled: false,
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.text,
+                                decoration: R.decorations
+                                    .textFormFieldDecoration(
+                                        null, "Enter Date..",
+                                        suffix: Icon(
+                                          Icons.calendar_today_outlined,
+                                          color: R.colors.theme,
+                                        )),
+                              ),
+                            ),
+                            SizedBox(height: FetchPixels.getPixelHeight(5)),
+                            SizedBox(
+                              height: FetchPixels.getPixelHeight(60),
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  Row(
+                                    children: List.generate(4, (index) {
+                                      return InkWell(
+                                          onTap: () {
+                                            auth.selectedDays = index;
+                                            auth.datesTimes = DateTime.now();
+                                            auth.update();
+                                            auth.datesTimes = auth.datesTimes
+                                                .add(Duration(
+                                                    days: dates[index]));
+                                            auth.startDate = DateTime.now();
+                                            auth.endDate = auth.datesTimes;
+                                            auth.update();
+                                            print(
+                                                "This is the start date: ${auth.startDate}");
+                                            print(
+                                                "This is the end date: ${auth.endDate}");
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    FetchPixels.getPixelWidth(
+                                                        15),
+                                                vertical:
+                                                    FetchPixels.getPixelHeight(
+                                                        8)),
+                                            margin: EdgeInsets.all(
+                                                FetchPixels.getPixelHeight(5)),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      FetchPixels
+                                                          .getPixelHeight(5)),
+                                              color: auth.selectedDays == index
+                                                  ? R.colors.theme
+                                                  : R.colors.whiteColor,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "${dates[index]} Days",
+                                                style: R.textStyle
+                                                    .mediumMetropolis()
+                                                    .copyWith(
+                                                      fontSize: FetchPixels
+                                                          .getPixelHeight(16),
+                                                      color:
+                                                          auth.selectedDays ==
+                                                                  index
+                                                              ? R.colors
+                                                                  .whiteColor
+                                                              : R.colors
+                                                                  .blackColor,
+                                                    ),
+                                              ),
+                                            ),
+                                          ));
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: FetchPixels.getPixelHeight(10)),
+                            SizedBox(
+                                height: FetchPixels.getPixelHeight(450),
+                                child: CalendarScreen()),
+                            // getVerSpace(FetchPixels.getPixelHeight(10)),
+                          ],
+                        ),
+                  Text(
+                    "Description:",
+                    style: R.textStyle
+                        .mediumMetropolis()
+                        .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
+                  ),
+                  getVerSpace(FetchPixels.getPixelHeight(5)),
                   TextFormField(
                     style: R.textStyle.regularMetropolisItalic(),
                     validator: (value) =>

@@ -61,6 +61,9 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, ProductProvider>(
       builder: (context, auth, product, child) {
+        List<ProductModel> filteredProducts =
+            auth.isRenter ? auth.rentNowProducts : auth.buyNowProducts;
+
         return Column(
           children: [
             // AppBar(leading: Icon(Icons.construction),),
@@ -395,22 +398,11 @@ class _HomeViewState extends State<HomeView> {
                               SizedBox(
                                 height: FetchPixels.getPixelHeight(290),
                                 child: ListView.builder(
-                                  itemCount: product.products
-                                      .where((element) =>
-                                          element.productType ==
-                                              ProductsTypes.sell.name ||
-                                          element.productType ==
-                                              ProductsTypes.rent.name)
-                                      .length,
+                                  itemCount: filteredProducts.length,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
-                                    ProductModel model = product.products
-                                        .where((element) =>
-                                            element.productType ==
-                                                ProductsTypes.sell.name ||
-                                            element.productType ==
-                                                ProductsTypes.rent.name)
-                                        .toList()[index];
+                                    ProductModel model =
+                                        filteredProducts[index];
                                     return getPaddingWidget(
                                       EdgeInsets.all(10),
                                       CateWidget(
@@ -426,23 +418,70 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                         ),
-                        Container(
-                          color: R.colors.containerBG1,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 15),
-                          child: SizedBox(
-                            child: InkWell(
-                              onTap: () {
-                                Get.to(() => SpecialTailoryView());
-                              },
-                              child: Container(
-                                // margin: EdgeInsets.symmetric(horizontal: 100),
-                                height: FetchPixels.getPixelHeight(100),
-                                decoration: BoxDecoration(
-                                    color: R.colors.containerBG1,
-                                    image: getDecorationAssetImage(
-                                        context, R.images.specialTailory,
-                                        fit: BoxFit.fill)),
+
+                        getPaddingWidget(
+                          EdgeInsets.symmetric(
+                            horizontal: FetchPixels.getPixelWidth(10),
+                          ),
+                          Container(
+                            // width: 300,
+                            // color: R.colors.containerBG1,
+                            decoration: BoxDecoration(
+                              color: R.colors.theme1,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            // padding: EdgeInsets.symmetric(
+                            //     horizontal: 30, vertical: 15),
+                            child: Padding(
+                              padding: EdgeInsets.zero,
+                              child: Row(
+                                // mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Image part
+                                  getAssetImage(
+                                    R.images.heenaImg,
+                                    width: 150,
+                                    // height: 180,
+                                  ),
+                                  // SizedBox(height: 20),
+                                  // Text part
+                                  Column(
+                                    children: [
+                                      Text(
+                                        'Explore our Henna Service',
+                                        style: R.textStyle
+                                            .mediumMetropolis()
+                                            .copyWith(
+                                              fontSize:
+                                                  FetchPixels.getPixelHeight(
+                                                16,
+                                              ),
+                                              color: R.colors.whiteColor,
+                                            ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      // Button part
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Define your onPressed action here
+                                          Get.to(() => SpecialTailoryView());
+                                        },
+                                        child: Text('Book an Artist'),
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.purple[900],
+                                          backgroundColor: Colors.white,
+                                          textStyle: TextStyle(fontSize: 16),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -472,12 +511,12 @@ class _HomeViewState extends State<HomeView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               getVerSpace(FetchPixels.getPixelHeight(10)),
-                              Text("Explore Cartegory",
-                                  style: R.textStyle
-                                      .mediumMetropolis()
-                                      .copyWith(
-                                          fontSize:
-                                              FetchPixels.getPixelHeight(16))),
+                              Text(
+                                "Explore Cartegory",
+                                style: R.textStyle.mediumMetropolis().copyWith(
+                                      fontSize: FetchPixels.getPixelHeight(16),
+                                    ),
+                              ),
                               getVerSpace(FetchPixels.getPixelHeight(20)),
                             ],
                           ),

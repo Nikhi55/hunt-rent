@@ -90,6 +90,7 @@ class AppImages {
   String emptyEarnings = 'earnings-empty.png';
   String emptyBookings = 'bookings-empty.png';
   String emptyRentals = 'rentals-empty.png';
+  String heenaImg = 'heenaImg.png';
 
   //
   String chatoutline = 'chatoutline.png';

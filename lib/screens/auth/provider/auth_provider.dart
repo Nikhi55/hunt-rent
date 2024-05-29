@@ -45,6 +45,11 @@ class AuthProvider extends ChangeNotifier {
   DateTime datesTimes1 = DateTime.now();
 
   bool isPassVisible = true;
+  bool isRenter = false;
+
+  List<ProductModel> buyNowProducts = [];
+  List<ProductModel> rentNowProducts = [];
+  List<ProductModel> allProducts = [];
 
   changePassVisible() {
     isPassVisible = !isPassVisible;
@@ -97,6 +102,41 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  void toggleRenterStatus() {
+    isRenter = !isRenter;
+    notifyListeners();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    startLoader();
+    try {
+      // Fetch "Buy Now" products
+      QuerySnapshot buyNowSnapshot = await FirebaseFirestore.instance
+          .collection("products")
+          .where("type", isEqualTo: "buy")
+          .get();
+      buyNowProducts = buyNowSnapshot.docs
+          .map((doc) =>
+              ProductModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      // Fetch "Rent Now" products
+      QuerySnapshot rentNowSnapshot = await FirebaseFirestore.instance
+          .collection("products")
+          .where("type", isEqualTo: "rent")
+          .get();
+      rentNowProducts = rentNowSnapshot.docs
+          .map((doc) =>
+              ProductModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print("Error fetching products: $e");
+    }
+    stopLoader();
+    notifyListeners();
+  }
+
   /// Signin Method ///
   Future signInMethod(String email, String password) async {
     startLoader();
@@ -131,6 +171,10 @@ class AuthProvider extends ChangeNotifier {
       await baseAuth!.signOutQuery();
       await Get.toNamed(Routes.landingScreens);
     }
+  }
+
+  bool get isLoggedIn {
+    return userModel.email != null && userModel.email!.isNotEmpty;
   }
 
   /// UpdateUser Method ///

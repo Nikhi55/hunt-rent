@@ -402,71 +402,68 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           Row(
                                             children: List.generate(4, (index) {
                                               return InkWell(
-                                                  onTap: () {
-                                                    auth.selectedDays = index;
-                                                    auth.datesTimes =
-                                                        DateTime.now();
-                                                    auth.update();
-                                                    auth.datesTimes = auth
-                                                        .datesTimes
-                                                        .add(Duration(
-                                                            days:
-                                                                dates[index]));
-                                                    auth.startDate =
-                                                        DateTime.now();
-                                                    auth.endDate =
-                                                        auth.datesTimes;
-                                                    auth.update();
-                                                    print(
-                                                        "This is the start date: ${auth.startDate}");
-                                                    print(
-                                                        "This is the end date: ${auth.endDate}");
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(
-                                                        horizontal: FetchPixels
-                                                            .getPixelWidth(15),
-                                                        vertical: FetchPixels
-                                                            .getPixelHeight(5)),
-                                                    margin: EdgeInsets.all(
-                                                        FetchPixels
-                                                            .getPixelHeight(
-                                                                10)),
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: R.colors
-                                                              .fillColor),
-                                                      borderRadius: BorderRadius
-                                                          .circular(FetchPixels
-                                                              .getPixelHeight(
-                                                                  25)),
-                                                      color:
-                                                          auth.selectedDays ==
-                                                                  index
-                                                              ? R.colors.theme
-                                                              : R.colors
-                                                                  .whiteColor,
+                                                onTap: () {
+                                                  auth.selectedDays = index;
+                                                  auth.datesTimes =
+                                                      DateTime.now();
+                                                  auth.update();
+                                                  auth.datesTimes = auth
+                                                      .datesTimes
+                                                      .add(Duration(
+                                                          days: dates[index]));
+                                                  auth.startDate =
+                                                      DateTime.now();
+                                                  auth.endDate =
+                                                      auth.datesTimes;
+                                                  auth.update();
+                                                  print(
+                                                      "This is the start date: ${auth.startDate}");
+                                                  print(
+                                                      "This is the end date: ${auth.endDate}");
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: FetchPixels
+                                                          .getPixelWidth(15),
+                                                      vertical: FetchPixels
+                                                          .getPixelHeight(5)),
+                                                  margin: EdgeInsets.all(
+                                                      FetchPixels
+                                                          .getPixelHeight(10)),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color:
+                                                            R.colors.fillColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            FetchPixels
+                                                                .getPixelHeight(
+                                                                    25)),
+                                                    color: auth.selectedDays ==
+                                                            index
+                                                        ? R.colors.theme
+                                                        : R.colors.whiteColor,
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "${dates[index]} Days",
+                                                      style: R.textStyle
+                                                          .mediumMetropolis()
+                                                          .copyWith(
+                                                            fontSize: FetchPixels
+                                                                .getPixelHeight(
+                                                                    14),
+                                                            color: auth.selectedDays ==
+                                                                    index
+                                                                ? R.colors
+                                                                    .whiteColor
+                                                                : R.colors
+                                                                    .blackColor,
+                                                          ),
                                                     ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "${dates[index]} Days",
-                                                        style: R.textStyle
-                                                            .mediumMetropolis()
-                                                            .copyWith(
-                                                              fontSize: FetchPixels
-                                                                  .getPixelHeight(
-                                                                      14),
-                                                              color: auth
-                                                                          .selectedDays ==
-                                                                      index
-                                                                  ? R.colors
-                                                                      .whiteColor
-                                                                  : R.colors
-                                                                      .blackColor,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ));
+                                                  ),
+                                                ),
+                                              );
                                             }),
                                           ),
                                         ],

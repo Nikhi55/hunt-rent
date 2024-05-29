@@ -106,7 +106,7 @@ class _LandingScreensState extends State<LandingScreens> {
                                 vertical: FetchPixels.getPixelHeight(20)),
                             child: ElevatedButton(
                               onPressed: () {
-                                Get.offAllNamed(Routes.userTypeView);
+                                Get.offAllNamed(Routes.dashboardView);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -152,8 +152,8 @@ class _LandingScreensState extends State<LandingScreens> {
                                   ),
                                 ),
                                 SizedBox(
-                                    width:
-                                        20), // Add some space between dots and button
+                                  width: 20,
+                                ),
                                 IconButton(
                                   onPressed: () {
                                     if (currentPage < 3) {

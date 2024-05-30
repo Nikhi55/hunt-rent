@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CartModel{
-  String? docId;
+class CartModel {
+  dynamic? docId;
   String? customerName;
   String? customerId;
   String? productId;
@@ -53,4 +53,3 @@ class CartModel{
     return data;
   }
 }
-

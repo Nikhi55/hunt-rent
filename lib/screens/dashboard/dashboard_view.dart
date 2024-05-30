@@ -43,6 +43,7 @@ class _DashboardViewState extends State<DashboardView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ProductProvider>(context, listen: false);
       provider?.selectedCatId = provider?.majorCatList[0].docId ?? "";
+      Provider.of<AuthProvider>(context, listen: false).fetchProducts();
       setState(() {
         currentPage = widget.index;
         pageController = PageController(initialPage: currentPage);
@@ -88,7 +89,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   child: Center(
                     child: Text(
-                      authProvider.isRenter ? "SELL NOW" : "RENT NOW",
+                      authProvider.isRenter ? "BUY NOW" : "RENT NOW",
                       style: R.textStyle.mediumMetropolis().copyWith(
                             color: R.colors.whiteColor,
                             fontSize: FetchPixels.getPixelHeight(10),

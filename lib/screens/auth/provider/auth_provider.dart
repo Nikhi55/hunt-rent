@@ -111,25 +111,27 @@ class AuthProvider extends ChangeNotifier {
   Future<void> fetchProducts() async {
     startLoader();
     try {
-      // Fetch "Buy Now" products
-      QuerySnapshot buyNowSnapshot = await FirebaseFirestore.instance
-          .collection("products")
-          .where("type", isEqualTo: "buy")
-          .get();
-      buyNowProducts = buyNowSnapshot.docs
-          .map((doc) =>
-              ProductModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-
-      // Fetch "Rent Now" products
-      QuerySnapshot rentNowSnapshot = await FirebaseFirestore.instance
-          .collection("products")
-          .where("type", isEqualTo: "rent")
-          .get();
-      rentNowProducts = rentNowSnapshot.docs
-          .map((doc) =>
-              ProductModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
+      if (isRenter) {
+        // Fetch "Rent Now" products
+        QuerySnapshot rentNowSnapshot = await FirebaseFirestore.instance
+            .collection("products")
+            .where("product_type", isEqualTo: "rented")
+            .get();
+        rentNowProducts = rentNowSnapshot.docs
+            .map((doc) =>
+                ProductModel.fromJson(doc.data() as Map<String, dynamic>))
+            .toList();
+      } else {
+        // Fetch "Buy Now" products
+        QuerySnapshot buyNowSnapshot = await FirebaseFirestore.instance
+            .collection("products")
+            .where("product_type", isEqualTo: "sell")
+            .get();
+        buyNowProducts = buyNowSnapshot.docs
+            .map((doc) =>
+                ProductModel.fromJson(doc.data() as Map<String, dynamic>))
+            .toList();
+      }
     } catch (e) {
       print("Error fetching products: $e");
     }

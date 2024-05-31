@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hunt_and_rent/base/resizer/fetch_pixels.dart';
+import 'package:hunt_and_rent/forum/cpmments_view.dart';
+import 'package:hunt_and_rent/forum/forum_page.dart';
 import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/dashboard_view.dart';
@@ -50,12 +52,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                         return Container(
                           width: FetchPixels.width,
                           decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(20),
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: CachedNetworkImageProvider(
                                 widget.model.productImage![index],
                                 maxWidth: FetchPixels.width.toInt(),
-                                // maxHeight: FetchPixels.getPixelHeight(350).toInt(),
+                                maxHeight:
+                                    FetchPixels.getPixelHeight(450).toInt(),
                               ),
                             ),
                           ),
@@ -129,99 +133,108 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           color: R.colors.theme),
                                 ),
                               ),
-                              SizedBox(width: FetchPixels.getPixelWidth(10)),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: FetchPixels.getPixelHeight(10),
-                                  horizontal: FetchPixels.getPixelWidth(10),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: R.colors.containerBG,
-                                  borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(5),
-                                  ),
-                                ),
-                                child: Text(
-                                  widget.model.productType ?? "Party Wear",
-                                  style: R.textStyle
-                                      .semiBoldMetropolis()
-                                      .copyWith(
-                                          fontSize:
-                                              FetchPixels.getPixelHeight(12),
-                                          color: R.colors.blackColor),
-                                ),
-                              ),
+                              // SizedBox(width: FetchPixels.getPixelWidth(10)),
+                              // Container(
+                              //   padding: EdgeInsets.symmetric(
+                              //     vertical: FetchPixels.getPixelHeight(10),
+                              //     horizontal: FetchPixels.getPixelWidth(10),
+                              //   ),
+                              //   decoration: BoxDecoration(
+                              //     color: R.colors.containerBG,
+                              //     borderRadius: BorderRadius.circular(
+                              //       FetchPixels.getPixelHeight(5),
+                              //     ),
+                              //   ),
+                              //   child: Text(
+                              //     widget.model.productType ?? "Party Wear",
+                              //     style: R.textStyle
+                              //         .semiBoldMetropolis()
+                              //         .copyWith(
+                              //             fontSize:
+                              //                 FetchPixels.getPixelHeight(12),
+                              //             color: R.colors.blackColor),
+                              //   ),
+                              // ),
                               Spacer(),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: FetchPixels.getPixelHeight(10),
-                                  horizontal: FetchPixels.getPixelWidth(10),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: R.colors.containerBG,
-                                  borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(5),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "${pro.earningsList.where((element) => element.productId == widget.model.docId).length}",
-                                      style: R.textStyle
-                                          .semiBoldMetropolis()
-                                          .copyWith(
-                                              fontSize:
-                                                  FetchPixels.getPixelHeight(
-                                                      12),
-                                              color: R.colors.blackColor),
-                                    ),
-                                    SizedBox(
-                                        width: FetchPixels.getPixelWidth(10)),
-                                    Text(
-                                      "Times Rented",
-                                      style: R.textStyle
-                                          .semiBoldMetropolis()
-                                          .copyWith(
-                                              fontSize:
-                                                  FetchPixels.getPixelHeight(
-                                                      12),
-                                              color: R.colors.blackColor),
-                                    ),
-                                  ],
-                                ),
+                              // // Container(
+                              //   padding: EdgeInsets.symmetric(
+                              //     vertical: FetchPixels.getPixelHeight(10),
+                              //     horizontal: FetchPixels.getPixelWidth(10),
+                              //   ),
+                              //   decoration: BoxDecoration(
+                              //     color: R.colors.containerBG,
+                              //     borderRadius: BorderRadius.circular(
+                              //       FetchPixels.getPixelHeight(5),
+                              //     ),
+                              //   ),
+                              //   child: Row(
+                              //     children: [
+                              //       Text(
+                              //         "${pro.earningsList.where((element) => element.productId == widget.model.docId).length}",
+                              //         style: R.textStyle
+                              //             .semiBoldMetropolis()
+                              //             .copyWith(
+                              //                 fontSize:
+                              //                     FetchPixels.getPixelHeight(
+                              //                         12),
+                              //                 color: R.colors.blackColor),
+                              //       ),
+                              //       SizedBox(
+                              //           width: FetchPixels.getPixelWidth(10)),
+                              //       Text(
+                              //         "Times Rented",
+                              //         style: R.textStyle
+                              //             .semiBoldMetropolis()
+                              //             .copyWith(
+                              //                 fontSize:
+                              //                     FetchPixels.getPixelHeight(
+                              //                         12),
+                              //                 color: R.colors.blackColor),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
+                              Text(
+                                "QR ${widget.model.productPrice!}",
+                                style: R.textStyle
+                                    .semiBoldMetropolis()
+                                    .copyWith(
+                                        color: R.colors.theme,
+                                        fontSize:
+                                            FetchPixels.getPixelHeight(20)),
                               ),
                               SizedBox(width: FetchPixels.getPixelWidth(10)),
                             ],
                           ),
-                          SizedBox(height: FetchPixels.getPixelHeight(20)),
-                          SizedBox(
-                            width: FetchPixels.getPixelWidth(150),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Price",
-                                  style: R.textStyle
-                                      .semiBoldMetropolis()
-                                      .copyWith(
-                                          fontSize:
-                                              FetchPixels.getPixelHeight(14),
-                                          color: R.colors.fillColor),
-                                ),
-                                SizedBox(
-                                    height: FetchPixels.getPixelHeight(10)),
-                                Text(
-                                  "QR ${widget.model.productPrice!}",
-                                  style: R.textStyle
-                                      .semiBoldMetropolis()
-                                      .copyWith(
-                                          color: R.colors.theme,
-                                          fontSize:
-                                              FetchPixels.getPixelHeight(20)),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // SizedBox(height: FetchPixels.getPixelHeight(20)),
+                          // SizedBox(
+                          //   width: FetchPixels.getPixelWidth(150),
+                          //   child: Column(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       Text(
+                          //         "Price",
+                          //         style: R.textStyle
+                          //             .semiBoldMetropolis()
+                          //             .copyWith(
+                          //                 fontSize:
+                          //                     FetchPixels.getPixelHeight(14),
+                          //                 color: R.colors.fillColor),
+                          //       ),
+                          //       SizedBox(
+                          //           height: FetchPixels.getPixelHeight(10)),
+                          //       Text(
+                          //         "QR ${widget.model.productPrice!}",
+                          //         style: R.textStyle
+                          //             .semiBoldMetropolis()
+                          //             .copyWith(
+                          //                 color: R.colors.theme,
+                          //                 fontSize:
+                          //                     FetchPixels.getPixelHeight(20)),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           Divider(),
                           SizedBox(height: FetchPixels.getPixelHeight(5)),
                           Column(
@@ -358,117 +371,131 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 color: R.colors.blackColor.withOpacity(0.7),
                                 fontSize: FetchPixels.getPixelHeight(14)),
                           ),
-                          Divider(),
+                          // Divider(),
                           SizedBox(height: FetchPixels.getPixelHeight(5)),
-                          Text(
-                            "Additional Instructions",
-                            style: R.textStyle.semiBoldMetropolis().copyWith(
-                                fontSize: FetchPixels.getPixelHeight(16)),
-                          ),
-                          SizedBox(height: FetchPixels.getPixelHeight(5)),
-                          Text(
-                            widget.model.additionalInstructions ??
-                                "There is No Additional Instruction for this Order",
-                            style: R.textStyle.regularMetropolis().copyWith(
-                                fontSize: FetchPixels.getPixelHeight(15)),
-                          ),
-                          Divider(),
+                          // Text(
+                          //   "Additional Instructions",
+                          //   style: R.textStyle.semiBoldMetropolis().copyWith(
+                          //       fontSize: FetchPixels.getPixelHeight(16)),
+                          // ),
+                          // SizedBox(height: FetchPixels.getPixelHeight(5)),
+                          // Text(
+                          //   widget.model.additionalInstructions ??
+                          //       "There is No Additional Instruction for this Order",
+                          //   style: R.textStyle.regularMetropolis().copyWith(
+                          //       fontSize: FetchPixels.getPixelHeight(15)),
+                          // ),
+                          // Divider(),
                           SizedBox(height: FetchPixels.getPixelHeight(10)),
                           widget.isCart != null
                               ? SizedBox()
                               : Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      widget.model.productType == "sell"
-                                          ? ""
-                                          : "Rental Days",
-                                      style: R.textStyle
-                                          .regularMetropolis()
-                                          .copyWith(
-                                              fontSize:
-                                                  FetchPixels.getPixelHeight(
-                                                      13),
-                                              color: R.colors.blackColor
-                                                  .withOpacity(0.62)),
-                                    ),
-                                    SizedBox(
-                                        height: FetchPixels.getPixelHeight(5)),
-                                    SizedBox(
-                                      height: FetchPixels.getPixelHeight(60),
-                                      child: ListView(
-                                        scrollDirection: Axis.horizontal,
-                                        children: [
-                                          Row(
-                                            children: List.generate(4, (index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  auth.selectedDays = index;
-                                                  auth.datesTimes =
-                                                      DateTime.now();
-                                                  auth.update();
-                                                  auth.datesTimes = auth
-                                                      .datesTimes
-                                                      .add(Duration(
-                                                          days: dates[index]));
-                                                  auth.startDate =
-                                                      DateTime.now();
-                                                  auth.endDate =
-                                                      auth.datesTimes;
-                                                  auth.update();
-                                                  print(
-                                                      "This is the start date: ${auth.startDate}");
-                                                  print(
-                                                      "This is the end date: ${auth.endDate}");
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: FetchPixels
-                                                          .getPixelWidth(15),
-                                                      vertical: FetchPixels
-                                                          .getPixelHeight(5)),
-                                                  margin: EdgeInsets.all(
-                                                      FetchPixels
-                                                          .getPixelHeight(10)),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color:
-                                                            R.colors.fillColor),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            FetchPixels
-                                                                .getPixelHeight(
-                                                                    25)),
-                                                    color: auth.selectedDays ==
-                                                            index
-                                                        ? R.colors.theme
-                                                        : R.colors.whiteColor,
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "${dates[index]} Days",
-                                                      style: R.textStyle
-                                                          .mediumMetropolis()
-                                                          .copyWith(
-                                                            fontSize: FetchPixels
-                                                                .getPixelHeight(
-                                                                    14),
-                                                            color: auth.selectedDays ==
-                                                                    index
-                                                                ? R.colors
-                                                                    .whiteColor
-                                                                : R.colors
-                                                                    .blackColor,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }),
+                                    // Text(
+                                    //   widget.model.productType == "sell"
+                                    //       ? ""
+                                    //       : "Rental Days",
+                                    //   style: R.textStyle
+                                    //       .regularMetropolis()
+                                    //       .copyWith(
+                                    //           fontSize:
+                                    //               FetchPixels.getPixelHeight(
+                                    //                   13),
+                                    //           color: R.colors.blackColor
+                                    //               .withOpacity(0.62)),
+                                    // ),
+                                    // SizedBox(
+                                    //     height: FetchPixels.getPixelHeight(5)),
+                                    // SizedBox(
+                                    //   height: FetchPixels.getPixelHeight(60),
+                                    //   child: ListView(
+                                    //     scrollDirection: Axis.horizontal,
+                                    //     children: [
+                                    //       Row(
+                                    //         children: List.generate(4, (index) {
+                                    //           return InkWell(
+                                    //             onTap: () {
+                                    //               auth.selectedDays = index;
+                                    //               auth.datesTimes =
+                                    //                   DateTime.now();
+                                    //               auth.update();
+                                    //               auth.datesTimes = auth
+                                    //                   .datesTimes
+                                    //                   .add(Duration(
+                                    //                       days: dates[index]));
+                                    //               auth.startDate =
+                                    //                   DateTime.now();
+                                    //               auth.endDate =
+                                    //                   auth.datesTimes;
+                                    //               auth.update();
+                                    //               print(
+                                    //                   "This is the start date: ${auth.startDate}");
+                                    //               print(
+                                    //                   "This is the end date: ${auth.endDate}");
+                                    //             },
+                                    //             child: Container(
+                                    //               padding: EdgeInsets.symmetric(
+                                    //                   horizontal: FetchPixels
+                                    //                       .getPixelWidth(15),
+                                    //                   vertical: FetchPixels
+                                    //                       .getPixelHeight(5)),
+                                    //               margin: EdgeInsets.all(
+                                    //                   FetchPixels
+                                    //                       .getPixelHeight(10)),
+                                    //               decoration: BoxDecoration(
+                                    //                 border: Border.all(
+                                    //                     color:
+                                    //                         R.colors.fillColor),
+                                    //                 borderRadius:
+                                    //                     BorderRadius.circular(
+                                    //                         FetchPixels
+                                    //                             .getPixelHeight(
+                                    //                                 25)),
+                                    //                 color: auth.selectedDays ==
+                                    //                         index
+                                    //                     ? R.colors.theme
+                                    //                     : R.colors.whiteColor,
+                                    //               ),
+                                    //               child: Center(
+                                    //                 child: Text(
+                                    //                   "${dates[index]} Days",
+                                    //                   style: R.textStyle
+                                    //                       .mediumMetropolis()
+                                    //                       .copyWith(
+                                    //                         fontSize: FetchPixels
+                                    //                             .getPixelHeight(
+                                    //                                 14),
+                                    //                         color: auth.selectedDays ==
+                                    //                                 index
+                                    //                             ? R.colors
+                                    //                                 .whiteColor
+                                    //                             : R.colors
+                                    //                                 .blackColor,
+                                    //                       ),
+                                    //                 ),
+                                    //               ),
+                                    //             ),
+                                    //           );
+                                    //         }),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    // SizedBox(
+                                    //     height: FetchPixels.getPixelHeight(5)),
+                                    widget.model.productType == "sell"
+                                        ? SizedBox()
+                                        : Text(
+                                            "Booking Date",
+                                            style: R.textStyle
+                                                .mediumMetropolis()
+                                                .copyWith(
+                                                    fontSize: FetchPixels
+                                                        .getPixelHeight(18)),
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                    // SizedBox(
+                                    //     height: FetchPixels.getPixelHeight(5)),
                                     SizedBox(
                                         height: FetchPixels.getPixelHeight(10)),
                                     widget.model.productType == "sell"
@@ -478,6 +505,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                 FetchPixels.getPixelHeight(420),
                                             child: CalendarScreen()),
                                     Divider(),
+                                    // ForumView(),
+                                    // CommentsView(
+                                    //   model: null,
+                                    // ),
                                     SizedBox(
                                         height: FetchPixels.getPixelHeight(10)),
                                     auth.isLoading
@@ -487,6 +518,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         : MyButton(
                                             // isPrefixIcon: true,
                                             onTap: () async {
+                                              if (!auth.isLoggedIn) {
+                                                Get.snackbar(
+                                                  "Please login",
+                                                  "You need to be logged in to add items to the cart",
+                                                  backgroundColor:
+                                                      R.colors.whiteColor,
+                                                );
+                                                return;
+                                              }
                                               print(auth.userModel.cart!
                                                   .map((e) => e.toJson()));
                                               if (auth.userModel.cart!

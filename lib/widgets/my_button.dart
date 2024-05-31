@@ -49,7 +49,7 @@ class _MyButtonState extends State<MyButton> {
             border: Border.all(color: R.colors.theme1.withOpacity(0.3)),
             // border: Border.all(color: R.colors.blackColor),
             borderRadius: BorderRadius.circular(widget.borderRadius == null
-                ? FetchPixels.getPixelHeight(10)
+                ? FetchPixels.getPixelHeight(30)
                 : widget.borderRadius!),
             color: widget.color ?? R.colors.theme),
         child: Center(

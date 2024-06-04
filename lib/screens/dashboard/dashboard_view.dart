@@ -157,7 +157,7 @@ class _DashboardViewState extends State<DashboardView> {
           // ),
 
           body: Container(
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -202,8 +202,7 @@ class _DashboardViewState extends State<DashboardView> {
                               R.images.selectedHome),
                           tab(authProvider, 1, R.images.category,
                               R.images.selectedCategory),
-                          Container(),
-                          getHorSpace(FetchPixels.getPixelWidth(40)),
+                          getHorSpace(FetchPixels.getPixelWidth(10)),
                           tab(authProvider, 2, R.images.cart,
                               R.images.selectedCart),
                           tab(authProvider, 3, R.images.profile,
@@ -253,7 +252,7 @@ class _DashboardViewState extends State<DashboardView> {
                     ? "Categories"
                     : index == 2
                         ? "Cart"
-                        : "Me",
+                        : "Profile",
             style: R.textStyle.regularMetropolis().copyWith(
                   fontSize: FetchPixels.getPixelHeight(12),
                   color: currentPage == index

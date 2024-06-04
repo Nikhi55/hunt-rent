@@ -24,7 +24,7 @@ class _LoginSignupState extends State<LoginSignup> {
           toolbarHeight: 200,
           centerTitle: true,
           title: getAssetImage(
-            R.images.logo01,
+            R.images.hrlogo2,
             height: FetchPixels.getPixelHeight(150),
             width: FetchPixels.getPixelWidth(150),
           ),

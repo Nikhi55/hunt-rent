@@ -26,6 +26,7 @@ class _PostWidgetState extends State<PostWidget> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isReply = false;
   var locale = 'en';
+  bool showAllComments = false;
 
   String timeUntil(DateTime date) {
     return timeago.format(date, locale: locale, allowFromNow: true);

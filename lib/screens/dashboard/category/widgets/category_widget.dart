@@ -9,7 +9,7 @@ import '../../../../base/resizer/fetch_pixels.dart';
 import '../../../../base/widget_utils.dart';
 import '../../../../resources/resources.dart';
 import '../../home/model/product_model.dart';
-import '../../home/special_tailory/special_tailory_form.dart';
+import '../../home/heena_service/special_tailory_form.dart';
 
 class CateWidget extends StatelessWidget {
   final bool isSpecial;
@@ -173,10 +173,11 @@ class CateWidget extends StatelessWidget {
 
 String? replaceShortLetters(List<dynamic>? sizes) {
   Map<String, String> sizeMapping = {
-    'Small': 'S',
-    'Medium': 'M',
-    'Large': 'L',
-    'Extra Large': 'XL',
+    'Small': '36(S)',
+    'Medium': '38(M)',
+    'Large': '40(L)',
+    'Extra Large': '42(XL)',
+    'Extra Extra Large': '44(XXL)'
     // Add more mappings as needed
   };
 

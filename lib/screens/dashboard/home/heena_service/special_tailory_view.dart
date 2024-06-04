@@ -3,8 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:hunt_and_rent/screens/dashboard/home/special_tailory/widget/abayas_view.dart';
-import 'package:hunt_and_rent/screens/dashboard/home/special_tailory/widget/special_tailory_widget.dart';
+import 'package:hunt_and_rent/screens/dashboard/cart/check_out_pay.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/heena_service/check_out.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/heena_service/model/BookingDetails.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/heena_service/widget/abayas_view.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/heena_service/widget/special_tailory_widget.dart';
 import 'package:hunt_and_rent/widgets/my_button.dart';
 import 'package:hunt_and_rent/widgets/table_calender.dart';
 
@@ -322,6 +325,8 @@ class _SpecialTailoryViewState extends State<SpecialTailoryView> {
   final TextEditingController adressController = TextEditingController();
   final TextEditingController zipController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
+  DateTime selectedDate = DateTime.now(); // Initial selected date
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -418,7 +423,13 @@ class _SpecialTailoryViewState extends State<SpecialTailoryView> {
                           borderRadius: BorderRadius.circular(10),
                           color: R.colors.bgColor,
                         ),
-                        child: CalendarScreen(),
+                        child: HeenaCalendarScreen(
+                          onDateSelected: (date) {
+                            setState(() {
+                              selectedDate = date;
+                            });
+                          },
+                        ),
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(7)),
                       Container(
@@ -585,7 +596,23 @@ class _SpecialTailoryViewState extends State<SpecialTailoryView> {
                         ),
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(20)),
-                      MyButton(onTap: () {}, buttonText: 'Book Now'),
+                      MyButton(
+                          onTap: () {
+                            final bookingDetails = BookingDetails(
+                              address: adressController.text,
+                              zipCode: zipController.text,
+                              state: stateController.text,
+                              selectedDate: selectedDate,
+                            );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CheckOutPage1(
+                                  bookingDetails: bookingDetails,
+                                ),
+                              ),
+                            );
+                          },
+                          buttonText: 'Book Now'),
                       getVerSpace(FetchPixels.getPixelHeight(16)),
                     ],
                   ),

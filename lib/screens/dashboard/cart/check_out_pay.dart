@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
+import 'package:hunt_and_rent/screens/dashboard/cart/cardDetails.dart';
+import 'package:hunt_and_rent/screens/dashboard/cart/payment_config.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 import '../../../base/resizer/fetch_pixels.dart';
@@ -20,7 +27,8 @@ import '../profile/pages/fatora_pay.dart';
 import 'model/cart_model.dart';
 
 class CheckOutPage extends StatefulWidget {
-  CheckOutPage({super.key});
+  final ProductModel model;
+  CheckOutPage({super.key, required this.model});
 
   @override
   State<CheckOutPage> createState() => _CheckOutPageState();
@@ -35,41 +43,93 @@ class _CheckOutPageState extends State<CheckOutPage> {
   ];
   List<String> payName = [
     "Debit/MasterCard",
-    "Credit Card",
+    "Pay With Google Pay/Apple Pay",
     "Cash on Delivery",
   ];
   int currentPay = 0;
   int currentSelected = 0;
   var total = 0;
+  double selectedTip = 0.0;
 
-  addTotalValue() {
-    var pro = Provider.of<ProductProvider>(context, listen: false);
-    var auth = Provider.of<AuthProvider>(context, listen: false);
-    for (var i = 0;
-        i <
-            pro.products
-                .where((element) => auth.cartDocList.contains(element.docId))
-                .length;
-        i++) {
-      total = total +
-          int.parse(pro.products
-              .where((element) => auth.cartDocList.contains(element.docId))
-              .toList()[i]
-              .productPrice!);
-      print("total $total");
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   addTotalValue();
+  // }
 
-  @override
-  void initState() {
-    addTotalValue();
-    super.initState();
-  }
+  // void addTotalValue() {
+  //   final pro = Provider.of<ProductProvider>(context, listen: false);
+  //   double initialPrice = double.parse(pro.totalPrice.toString());
+  //   pro.setTotalPrice(initialPrice);
+  // }
+
+  String os = Platform.operatingSystem;
+  var applePayButton = ApplePayButton(
+    paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
+    paymentItems: const [
+      PaymentItem(
+        label: 'Item A',
+        amount: '0.01',
+        status: PaymentItemStatus.final_price,
+      ),
+      PaymentItem(
+        label: 'Item B',
+        amount: '0.01',
+        status: PaymentItemStatus.final_price,
+      ),
+      PaymentItem(
+        label: 'Total',
+        amount: '0.02',
+        status: PaymentItemStatus.final_price,
+      )
+    ],
+    style: ApplePayButtonStyle.black,
+    width: double.infinity,
+    height: 50,
+    type: ApplePayButtonType.buy,
+    margin: const EdgeInsets.only(top: 15.0),
+    onPaymentResult: (result) => debugPrint('Payment Result $result'),
+    loadingIndicator: const Center(
+      child: CircularProgressIndicator(),
+    ),
+  );
+
+  var googlePayButton = GooglePayButton(
+    paymentConfiguration: PaymentConfiguration.fromJsonString(defaultGooglePay),
+    paymentItems: const [
+      PaymentItem(
+        label: 'Total',
+        amount: '0.01',
+        status: PaymentItemStatus.final_price,
+      )
+    ],
+    type: GooglePayButtonType.pay,
+    margin: const EdgeInsets.only(top: 15.0),
+    onPaymentResult: (result) => debugPrint('Payment Result $result'),
+    loadingIndicator: const Center(
+      child: CircularProgressIndicator(),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Consumer2<ProductProvider, AuthProvider>(
         builder: (context, pro, auth, child) {
+      // int totalValue = 0;
+      // for (var product in pro.products
+      //     .where((element) => auth.cartDocList.contains(element.docId))) {
+      //   totalValue += int.parse(product.productPrice!);
+      // }
+      double? totalPrice = auth.userModel.cart!
+          .firstWhere((element) => element.productId == widget.model.docId,
+              orElse: () => UserCart(
+                    startDate: Timestamp.now(),
+                    endDate: Timestamp.now(),
+                    productId: widget.model.docId,
+                    price: double.tryParse(widget.model.productPrice!) ?? 0.0,
+                  ))
+          .price;
+      // double totalPrice = widget.totalPrice;
       return Scaffold(
         appBar: AppBar(
             leading: InkWell(
@@ -107,17 +167,19 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         (element) => auth.cartDocList.contains(element.docId))
                     .length,
                 padding: EdgeInsets.symmetric(
-                    horizontal: FetchPixels.getPixelWidth(20)),
+                  horizontal: FetchPixels.getPixelWidth(10),
+                ),
                 itemBuilder: (context, index) {
                   ProductModel model = pro.products
                       .where(
                           (element) => auth.cartDocList.contains(element.docId))
                       .toList()[index];
                   return Card(
-                    // shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(16),
-                    //     side: BorderSide(color: R.colors.g1)),
-                    // borderOnForeground: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: R.colors.fillColor),
+                    ),
+                    borderOnForeground: true,
                     color: R.colors.whiteColor,
                     elevation: 0.4,
                     shadowColor: R.colors.containerBG1,
@@ -129,157 +191,199 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   );
                 },
               ),
-              ListView(
-                primary: true,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                    horizontal: FetchPixels.getPixelWidth(20)),
-                children: [
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
-                  // ListTile(
-                  //   contentPadding: EdgeInsets.zero,
-                  //   leading: getAssetImage(R.images.locationIcon,
-                  //       scale: FetchPixels.getPixelHeight(3)),
-                  //   title: Text(
-                  //     "My Home Address",
-                  //     style: R.textStyle
-                  //         .mediumMetropolis()
-                  //         .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
-                  //   ),
-                  //   subtitle: Text(
-                  //     "${pro.locationAddress}",
-                  //     style: R.textStyle
-                  //         .regularMetropolis()
-                  //         .copyWith(fontSize: FetchPixels.getPixelHeight(12)),
-                  //   ),
-                  // ),
-                  ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: getAssetImage(R.images.locationIcon,
-                          scale: FetchPixels.getPixelHeight(3)),
-                      title: TextFormField(
-                        autovalidateMode: AutovalidateMode.always,
-                        validator: (value) {},
-                        scribbleEnabled: true,
-                        textAlign: TextAlign.start,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 16),
-                          label: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              'Enter Your Adress',
-                              style: R.textStyle.regularMetropolis().copyWith(
-                                  fontSize: FetchPixels.getPixelHeight(14)),
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                          isCollapsed: true,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: R.colors.fillColor)),
+                  borderOnForeground: true,
+                  color: R.colors.whiteColor,
+                  elevation: 0.4,
+                  shadowColor: R.colors.containerBG1,
+                  child: ListView(
+                    primary: true,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: FetchPixels.getPixelWidth(10)),
+                    children: [
+                      getVerSpace(FetchPixels.getPixelHeight(10)),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: getAssetImage(R.images.locationIcon,
+                            scale: FetchPixels.getPixelHeight(3)),
+                        title: Text(
+                          "My Home Address",
+                          style: R.textStyle.mediumMetropolis().copyWith(
+                              fontSize: FetchPixels.getPixelHeight(16)),
                         ),
-                      )),
-                  // Container(
-                  //   height: FetchPixels.getPixelHeight(250),
-                  //   child: ClipRRect(
-                  //     borderRadius: BorderRadius.circular(16),
-                  //     child: GoogleMap(
-                  //       initialCameraPosition: CameraPosition(
-                  //           target: LatLng(
-                  //               double.parse(pro.lat), double.parse(pro.lng)),
-                  //           zoom: 11),
-                  //       mapType: MapType.normal,
-                  //       scrollGesturesEnabled: true,
-                  //       zoomControlsEnabled: true,
-                  //       zoomGesturesEnabled: true,
-                  //       myLocationEnabled: true,
-                  //       myLocationButtonEnabled: true,
-                  //       onTap: (latLng) {
-                  //         pro.lat = latLng.latitude.toString();
-                  //         pro.lng = latLng.longitude.toString();
-                  //         pro.markers.clear();
-                  //         pro.markers.add(
-                  //           Marker(
-                  //             markerId: MarkerId('marker_1'),
-                  //             position: LatLng(
-                  //                 double.parse(pro.lat), double.parse(pro.lng)),
-                  //             infoWindow:
-                  //                 InfoWindow(title: "${pro.locationAddress}"),
-                  //             icon: BitmapDescriptor.defaultMarkerWithHue(
-                  //                 BitmapDescriptor.hueViolet),
-                  //           ),
-                  //         );
-                  //         pro.fetchLocationAddress();
-                  //         pro.notifyListeners();
-                  //       },
-                  //       onMapCreated: (GoogleMapController controller) {
-                  //         // _controller.complete(controller);
-                  //       },
-                  //       markers: Set<Marker>.of(pro.markers),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                        subtitle: Text(
+                          "${pro.locationAddress}",
+                          style: R.textStyle.regularMetropolis().copyWith(
+                              fontSize: FetchPixels.getPixelHeight(12)),
+                        ),
+                      ),
+                      // ListTile(
+                      //   contentPadding: EdgeInsets.zero,
+                      //   leading: getAssetImage(R.images.locationIcon,
+                      //       scale: FetchPixels.getPixelHeight(3)),
+                      //   title: TextFormField(
+                      //     autovalidateMode: AutovalidateMode.always,
+                      //     validator: (value) {},
+                      //     scribbleEnabled: true,
+                      //     textAlign: TextAlign.start,
+                      //     decoration: InputDecoration(
+                      //       contentPadding:
+                      //           EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      //       label: Padding(
+                      //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      //         child: Text(
+                      //           'Enter Your Adress',
+                      //           style: R.textStyle.regularMetropolis().copyWith(
+                      //               fontSize: FetchPixels.getPixelHeight(14)),
+                      //         ),
+                      //       ),
+                      //       border: OutlineInputBorder(
+                      //           borderRadius: BorderRadius.circular(25)),
+                      //       isCollapsed: true,
+                      //     ),
+                      //   ),
+                      // ),
+                      Container(
+                        height: FetchPixels.getPixelHeight(250),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Consumer<ProductProvider>(
+                            builder: (context, pro, child) {
+                              double lat = double.tryParse(pro.lat) ?? 0.0;
+                              double lng = double.tryParse(pro.lng) ?? 0.0;
+                              return GoogleMap(
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(lat, lng), zoom: 11),
+                                mapType: MapType.normal,
+                                scrollGesturesEnabled: true,
+                                zoomControlsEnabled: true,
+                                zoomGesturesEnabled: true,
+                                myLocationEnabled: true,
+                                myLocationButtonEnabled: true,
+                                onTap: (latLng) {
+                                  pro.lat = latLng.latitude.toString();
+                                  pro.lng = latLng.longitude.toString();
+                                  pro.markers.clear();
+                                  pro.markers.add(
+                                    Marker(
+                                      markerId: MarkerId('marker_1'),
+                                      position: LatLng(
+                                          latLng.latitude, latLng.longitude),
+                                      infoWindow: InfoWindow(
+                                          title: "${pro.locationAddress}"),
+                                      icon:
+                                          BitmapDescriptor.defaultMarkerWithHue(
+                                              BitmapDescriptor.hueViolet),
+                                    ),
+                                  );
+                                  pro.fetchLocationAddress();
+                                  // pro.notifyListeners();
+                                },
+                                onMapCreated: (GoogleMapController controller) {
+                                  // _controller.complete(controller);
+                                },
+                                markers: Set<Marker>.of(pro.markers),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
               ListView(
                 primary: true,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.symmetric(
-                    horizontal: FetchPixels.getPixelWidth(20)),
+                    horizontal: FetchPixels.getPixelWidth(10)),
                 children: [
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: getAssetImage(R.images.clock,
-                        scale: FetchPixels.getPixelHeight(3)),
-                    title: Text(
-                      "Within 1 Day",
-                      style: R.textStyle
-                          .mediumMetropolis()
-                          .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(color: R.colors.fillColor)),
+                    borderOnForeground: true,
+                    color: R.colors.whiteColor,
+                    elevation: 0.4,
+                    shadowColor: R.colors.containerBG1,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          leading: getAssetImage(R.images.clock,
+                              scale: FetchPixels.getPixelHeight(3)),
+                          title: Text(
+                            "Within 1 Day",
+                            style: R.textStyle.mediumMetropolis().copyWith(
+                                fontSize: FetchPixels.getPixelHeight(16)),
+                          ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          leading: getAssetImage(R.images.reward,
+                              scale: FetchPixels.getPixelHeight(3)),
+                          title: Text(
+                            "Reward your rider with a tip",
+                            style: R.textStyle.mediumMetropolis().copyWith(
+                                fontSize: FetchPixels.getPixelHeight(16)),
+                          ),
+                          subtitle: Text(
+                            "Your rider keeps 100% of the tips",
+                            style: R.textStyle.regularMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.6),
+                                fontSize: FetchPixels.getPixelHeight(12)),
+                          ),
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          title: Text(
+                            "If you want to give tips on your rider?",
+                            style: R.textStyle.regularMetropolis().copyWith(
+                                color: R.colors.theme,
+                                fontSize: FetchPixels.getPixelHeight(14)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 8.0,
+                            right: 8.0,
+                            bottom: 8.0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _buildTipContainer(5.0),
+                              _buildTipContainer(10.0),
+                              _buildTipContainer(15.0),
+                              _buildTipContainer(15.0),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: getAssetImage(R.images.reward,
-                        scale: FetchPixels.getPixelHeight(3)),
-                    title: Text(
-                      "Reward your rider with a tip",
-                      style: R.textStyle
-                          .mediumMetropolis()
-                          .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
-                    ),
-                    subtitle: Text(
-                      "Your rider keeps 100% of the tips",
-                      style: R.textStyle.regularMetropolis().copyWith(
-                          color: R.colors.blackColor.withOpacity(0.6),
-                          fontSize: FetchPixels.getPixelHeight(12)),
-                    ),
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      "If you want to give tips on your rider?",
-                      style: R.textStyle.regularMetropolis().copyWith(
-                          color: R.colors.theme,
-                          fontSize: FetchPixels.getPixelHeight(14)),
-                    ),
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
-                  Text(
-                    "Pay with",
-                    style: R.textStyle
-                        .mediumMetropolis()
-                        .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
-                  Column(
-                    children: List.generate(3, (index) {
-                      return pay(index);
-                    }),
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
+                  // getVerSpace(FetchPixels.getPixelHeight(10)),
+                  // Text(
+                  //   "Pay with",
+                  //   style: R.textStyle
+                  //       .mediumMetropolis()
+                  //       .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
+                  // ),
+                  // getVerSpace(FetchPixels.getPixelHeight(10)),
+                  // Column(
+                  //   children: List.generate(3, (index) {
+                  //     return pay(index);
+                  //   }),
+                  // ),
+                  // getVerSpace(FetchPixels.getPixelHeight(10)),
                   // Text(
                   //   "Items Summary",
                   //   style: R.textStyle
@@ -322,203 +426,241 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   //     );
                   //   }),
                   // ),
-                  Text(
-                    "Payment Summary",
-                    style: R.textStyle
-                        .mediumMetropolis()
-                        .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Basket Total",
-                        style: R.textStyle
-                            .regularMetropolis()
-                            .copyWith(fontSize: FetchPixels.getPixelHeight(14)),
-                      ),
-                      Text(
-                        "QR $total.00",
-                        style: R.textStyle
-                            .mediumMetropolis()
-                            .copyWith(fontSize: FetchPixels.getPixelHeight(14)),
-                      ),
-                    ],
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(5)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Delivery Fee",
-                        style: R.textStyle
-                            .regularMetropolis()
-                            .copyWith(fontSize: FetchPixels.getPixelHeight(14)),
-                      ),
-                      Text(
-                        "QR 10.00",
-                        style: R.textStyle
-                            .mediumMetropolis()
-                            .copyWith(fontSize: FetchPixels.getPixelHeight(15)),
-                      ),
-                    ],
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(5)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Dry Cleaning Fee",
-                        style: R.textStyle
-                            .regularMetropolis()
-                            .copyWith(fontSize: FetchPixels.getPixelHeight(14)),
-                      ),
-                      Text(
-                        "QR 5.00",
-                        style: R.textStyle
-                            .mediumMetropolis()
-                            .copyWith(fontSize: FetchPixels.getPixelHeight(14)),
-                      ),
-                    ],
-                  ),
-                  getVerSpace(FetchPixels.getPixelHeight(20)),
-                  DottedLine(
-                    dashLength: 10,
-                    lineThickness: 2,
-                    dashColor: R.colors.fillColor,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: FetchPixels.getPixelWidth(10)),
-                    height: FetchPixels.getPixelHeight(50),
-                    width: FetchPixels.width,
-                    decoration: BoxDecoration(
-                        color: R.colors.whiteColor,
-                        borderRadius: BorderRadius.circular(
-                            FetchPixels.getPixelHeight(5))),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(color: R.colors.fillColor)),
+                    borderOnForeground: true,
+                    color: R.colors.whiteColor,
+                    elevation: 0.4,
+                    shadowColor: R.colors.containerBG1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
                         children: [
-                          Text(
-                            "Total Amount",
-                            style: R.textStyle.mediumMetropolis().copyWith(
-                                fontSize: FetchPixels.getPixelHeight(16)),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Payment Summary",
+                              style: R.textStyle.mediumMetropolis().copyWith(
+                                  fontSize: FetchPixels.getPixelHeight(16)),
+                            ),
                           ),
-                          Text(
-                            "QR ${total + 15}.00",
-                            style: R.textStyle.semiBoldMetropolis().copyWith(
-                                color: R.colors.theme,
-                                fontSize: FetchPixels.getPixelHeight(17)),
+                          getVerSpace(FetchPixels.getPixelHeight(10)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Basket Total",
+                                style: R.textStyle.regularMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(14)),
+                              ),
+                              Text(
+                                "QR $totalPrice",
+                                style: R.textStyle.mediumMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(14)),
+                              ),
+                            ],
                           ),
-                        ]),
+                          getVerSpace(FetchPixels.getPixelHeight(5)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Delivery Fee",
+                                style: R.textStyle.regularMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(14)),
+                              ),
+                              Text(
+                                "QR 10.00",
+                                style: R.textStyle.mediumMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(15)),
+                              ),
+                            ],
+                          ),
+                          getVerSpace(FetchPixels.getPixelHeight(5)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Dry Cleaning Fee",
+                                style: R.textStyle.regularMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(14)),
+                              ),
+                              Text(
+                                "QR 5.00",
+                                style: R.textStyle.mediumMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(14)),
+                              ),
+                            ],
+                          ),
+                          getVerSpace(FetchPixels.getPixelHeight(20)),
+                          DottedLine(
+                            dashLength: 11,
+                            lineThickness: 2,
+                            dashColor: R.colors.fillColor,
+                          ),
+                          Container(
+                            // padding: EdgeInsets.symmetric(
+                            //     horizontal: FetchPixels.getPixelWidth(10)),
+                            height: FetchPixels.getPixelHeight(50),
+                            width: FetchPixels.width,
+                            decoration: BoxDecoration(
+                                color: R.colors.whiteColor,
+                                borderRadius: BorderRadius.circular(
+                                    FetchPixels.getPixelHeight(5))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Total Amount",
+                                  style: R.textStyle
+                                      .mediumMetropolis()
+                                      .copyWith(
+                                          fontSize:
+                                              FetchPixels.getPixelHeight(16)),
+                                ),
+                                Text(
+                                  "QR ${totalPrice! + 15 + selectedTip}",
+                                  style: R.textStyle
+                                      .semiBoldMetropolis()
+                                      .copyWith(
+                                          color: R.colors.theme,
+                                          fontSize:
+                                              FetchPixels.getPixelHeight(17)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   getVerSpace(FetchPixels.getPixelHeight(20)),
-                  Text.rich(TextSpan(children: [
-                    TextSpan(
-                      text:
-                          "By placing the order you agree to the Credit Card Payment Terms and Conditions",
-                      style: R.textStyle.regularMetropolis().copyWith(
-                          fontSize: FetchPixels.getPixelHeight(12),
-                          color: R.colors.blackColor.withOpacity(0.5)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                "By placing the order you agree to the Credit Card Payment Terms and Conditions.",
+                            style: R.textStyle.regularMetropolis().copyWith(
+                                fontSize: FetchPixels.getPixelHeight(12),
+                                color: R.colors.blackColor.withOpacity(0.5)),
+                          ),
+                          TextSpan(
+                            text: "Terms and Conditions",
+                            style: R.textStyle.regularMetropolis().copyWith(
+                                fontSize: FetchPixels.getPixelHeight(14),
+                                color: R.colors.theme),
+                          ),
+                        ],
+                      ),
                     ),
-                    TextSpan(
-                      text: "Terms and Conditions",
-                      style: R.textStyle.regularMetropolis().copyWith(
-                          fontSize: FetchPixels.getPixelHeight(14),
-                          color: R.colors.theme),
-                    ),
-                  ])),
+                  ),
                   getVerSpace(FetchPixels.getPixelHeight(20)),
                   MyButton(
-                      onTap: () {
-                        if (currentPay == 0) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return FatoraPay(
-                                  currencyCode: 'QAR',
-                                  // Pass your desired values here
-                                  amount: total + 15,
-                                  customerEmail: '${auth.userModel.email}',
-                                  customerName: '${auth.userModel.userName}',
-                                  customerPhone: '1234567890',
-                                  customerCountry: 'LK',
-                                  lang: 'en',
-                                  note: 'This is a test note',
-                                );
-                              },
-                            ),
-                          );
-                        } else {
-                          Get.dialog(OnTapFunctionDialog(
-                            onTap: () async {
-                              for (int i = 0;
-                                  i < auth.userModel.cart!.length;
-                                  i++) {
-                                CartModel cartModel = CartModel(
-                                  productId: auth.userModel.cart![i].productId,
-                                  docId: "",
-                                  productPrice: pro.products
-                                      .where((element) =>
-                                          element.docId == auth.cartDocList[i])
-                                      .first
-                                      .productPrice,
-                                  customerId: auth.userModel.email,
-                                  customerName: auth.userModel.userName,
-                                  vendorId: pro.products
-                                      .where((element) =>
-                                          element.docId == auth.cartDocList[i])
-                                      .first
-                                      .email,
-                                  startDate: auth.userModel.cart![i].startDate!,
-                                  endDate: auth.userModel.cart![i].endDate!,
-                                  orderStatus: OrderStatus.Active.name,
-                                  submitStatus: "",
-                                );
-                                await FirebaseFirestore.instance
-                                    .collection("placeOrder")
-                                    .add(cartModel.toJson())
-                                    .then((value) async {
-                                  await FirebaseFirestore.instance
-                                      .collection("placeOrder")
-                                      .doc(value.id)
-                                      .update({"doc_id": value.id});
-                                });
-                                if (pro.products
-                                        .where((element) => auth.cartDocList
-                                            .contains(element.docId))
-                                        .toList()[i]
-                                        .productType ==
-                                    ProductsTypes.sell.name) {
-                                  await FirebaseFirestore.instance
-                                      .collection("products")
-                                      .doc(auth.userModel.cart![i].productId)
-                                      .update({
-                                    "product_type": ProductsTypes.sold.name
-                                  });
-                                } else {
-                                  await FirebaseFirestore.instance
-                                      .collection("products")
-                                      .doc(auth.userModel.cart![i].productId)
-                                      .update({
-                                    "product_type": ProductsTypes.rented.name
-                                  });
-                                }
-                              }
-                              auth.userModel.cart!.clear();
-                              auth.updateUser(auth.userModel);
-                              pro.getEarningRecord();
-                              Get.toNamed(Routes.paymentDetails);
-                            },
-                            text: "Are You Sure You Want to Place Your Order?",
-                            headingText: "Order Place!",
-                          ));
-                        }
-                      },
-                      buttonText: "Place Your Order"),
-                  getVerSpace(FetchPixels.getPixelHeight(30)),
+                    // onTap: () {
+                    //   if (currentPay == 0) {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) {
+                    //           return FatoraPay(
+                    //             currencyCode: 'QAR',
+                    //             // Pass your desired values here
+                    //             amount: total + 15,
+                    //             customerEmail: '${auth.userModel.email}',
+                    //             customerName: '${auth.userModel.userName}',
+                    //             customerPhone: '1234567890',
+                    //             customerCountry: 'LK',
+                    //             lang: 'en',
+                    //             note: 'This is a test note',
+                    //           );
+                    //         },
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Get.dialog(
+                    //       OnTapFunctionDialog(
+                    //         onTap: () async {
+                    //           for (int i = 0;
+                    //               i < auth.userModel.cart!.length;
+                    //               i++) {
+                    //             CartModel cartModel = CartModel(
+                    //               productId: auth.userModel.cart![i].productId,
+                    //               docId: "",
+                    //               productPrice: pro.products
+                    //                   .where((element) =>
+                    //                       element.docId == auth.cartDocList[i])
+                    //                   .first
+                    //                   .productPrice,
+                    //               customerId: auth.userModel.email,
+                    //               customerName: auth.userModel.userName,
+                    //               vendorId: pro.products
+                    //                   .where((element) =>
+                    //                       element.docId == auth.cartDocList[i])
+                    //                   .first
+                    //                   .email,
+                    //               startDate: auth.userModel.cart![i].startDate!,
+                    //               endDate: auth.userModel.cart![i].endDate!,
+                    //               orderStatus: OrderStatus.Active.name,
+                    //               submitStatus: "",
+                    //             );
+                    //             await FirebaseFirestore.instance
+                    //                 .collection("placeOrder")
+                    //                 .add(cartModel.toJson())
+                    //                 .then((value) async {
+                    //               await FirebaseFirestore.instance
+                    //                   .collection("placeOrder")
+                    //                   .doc(value.id)
+                    //                   .update({"doc_id": value.id});
+                    //             });
+                    //             if (pro.products
+                    //                     .where((element) => auth.cartDocList
+                    //                         .contains(element.docId))
+                    //                     .toList()[i]
+                    //                     .productType ==
+                    //                 ProductsTypes.sell.name) {
+                    //               await FirebaseFirestore.instance
+                    //                   .collection("products")
+                    //                   .doc(auth.userModel.cart![i].productId)
+                    //                   .update({
+                    //                 "product_type": ProductsTypes.sold.name
+                    //               });
+                    //             } else {
+                    //               await FirebaseFirestore.instance
+                    //                   .collection("products")
+                    //                   .doc(auth.userModel.cart![i].productId)
+                    //                   .update({
+                    //                 "product_type": ProductsTypes.rented.name
+                    //               });
+                    //             }
+                    //           }
+                    //           auth.userModel.cart!.clear();
+                    //           auth.updateUser(auth.userModel);
+                    //           pro.getEarningRecord();
+                    //           Get.toNamed(Routes.paymentDetails);
+                    //         },
+                    //         text: "Are You Sure You Want to Place Your Order?",
+                    //         headingText: "Order Place!",
+                    //       ),
+                    //     );
+                    //   }
+                    // },
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CheckoutScreen(),
+                        ),
+                      );
+                    },
+                    buttonText: "Place Your Order",
+                  ),
+                  getVerSpace(
+                    FetchPixels.getPixelHeight(30),
+                  ),
                 ],
               ),
             ],
@@ -526,6 +668,33 @@ class _CheckOutPageState extends State<CheckOutPage> {
         ),
       );
     });
+  }
+
+  Widget _buildTipContainer(double tipAmount) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedTip = tipAmount;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: selectedTip == tipAmount
+              ? R.colors.theme1
+              : R.colors.containerBG1,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          "QR $tipAmount",
+          style: R.textStyle.mediumMetropolis().copyWith(
+              fontSize: FetchPixels.getPixelHeight(14),
+              color: selectedTip == tipAmount
+                  ? R.colors.whiteColor
+                  : R.colors.blackColor),
+        ),
+      ),
+    );
   }
 
   tip(index) {

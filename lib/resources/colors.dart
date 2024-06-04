@@ -11,7 +11,7 @@ class AppColors {
 
   Color buttonText = Colors.white;
   // Color buttonText = Color.fromARGB(255, 255, 255, 255);
-  Color fillColor = const Color(0xFFB3B3B3);
+  Color fillColor = Color.fromARGB(255, 223, 223, 223);
   Color containerBG = const Color(0xFFD9D9D9);
   Color containerBG1 = const Color(0xFFEEEEEE);
   Color bottom = const Color(0xFFBE83EC);
@@ -19,9 +19,4 @@ class AppColors {
   Color goldenColor = const Color(0xFFFFA615);
   Color redColor = const Color(0xFFFF0431);
   Color summary = const Color(0xFFFABCFF);
-
-
-
 }
-
-

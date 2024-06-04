@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UsersModel {
@@ -57,21 +56,24 @@ class UsersModel {
   }
 }
 
-class UserCart{
+class UserCart {
   String? productId;
   Timestamp? startDate;
   Timestamp? endDate;
+  double? price;
 
   UserCart({
     this.productId,
     this.startDate,
     this.endDate,
+    this.price,
   });
 
   UserCart.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
     startDate = json['start_date'];
     endDate = json['end_date'];
+    price = json['price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +81,7 @@ class UserCart{
     data['product_id'] = this.productId;
     data['start_date'] = this.startDate;
     data['end_date'] = this.endDate;
+    data['price'] = this.price;
     return data;
   }
 }

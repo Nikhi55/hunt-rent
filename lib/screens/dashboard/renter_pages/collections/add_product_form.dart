@@ -783,9 +783,9 @@ class _AddProductFormState extends State<AddProductForm> {
                               ),
                             ),
                             SizedBox(height: FetchPixels.getPixelHeight(10)),
-                            SizedBox(
-                                height: FetchPixels.getPixelHeight(450),
-                                child: CalendarScreen()),
+                            // SizedBox(
+                            //     height: FetchPixels.getPixelHeight(450),
+                            //     child: CalendarScreen()),
                             // getVerSpace(FetchPixels.getPixelHeight(10)),
                           ],
                         ),

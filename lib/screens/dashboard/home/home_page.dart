@@ -8,7 +8,7 @@ import 'package:hunt_and_rent/screens/dashboard/dashboard_view.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/model/category_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/model/product_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
-import 'package:hunt_and_rent/screens/dashboard/home/special_tailory/special_tailory_view.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/heena_service/special_tailory_view.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/widgets/sub_category_widget.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/widgets/video_player_class.dart';
 import 'package:hunt_and_rent/screens/dashboard/profile/pages/notifications/notifications.dart';
@@ -71,21 +71,21 @@ class _HomeViewState extends State<HomeView> {
             Row(
               children: [
                 Expanded(
-                  child: getAssetImage(R.images.logo01,
+                  child: getAssetImage(R.images.hrlogo3,
                       // color: R.colors.buttonText,
                       height: 55,
                       boxFit: BoxFit.fitHeight),
                 ),
                 Spacer(),
                 Spacer(),
-                InkWell(
-                  onTap: () {
-                    Get.to(() => ForumView());
-                  },
-                  child: getAssetImage(R.images.chatoutline,
-                      // color: R.colors.buttonText,
-                      scale: 4.5),
-                ),
+                // InkWell(
+                //   onTap: () {
+                //     Get.to(() => ForumView());
+                //   },
+                //   child: getAssetImage(R.images.chatoutline,
+                //       // color: R.colors.buttonText,
+                //       scale: 4.5),
+                // ),
                 getHorSpace(FetchPixels.getPixelWidth(10)),
                 InkWell(
                   onTap: () {
@@ -433,32 +433,49 @@ class _HomeViewState extends State<HomeView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               getVerSpace(FetchPixels.getPixelHeight(10)),
-                              Text("New Arrivals",
-                                  style: R.textStyle
-                                      .mediumMetropolis()
-                                      .copyWith(
-                                          fontSize:
-                                              FetchPixels.getPixelHeight(16))),
-                              getVerSpace(FetchPixels.getPixelHeight(10)),
-                              SizedBox(
-                                height: FetchPixels.getPixelHeight(290),
-                                child: ListView.builder(
-                                  itemCount: filteredProducts.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    ProductModel model =
-                                        filteredProducts[index];
-                                    return getPaddingWidget(
-                                      EdgeInsets.all(10),
-                                      CateWidget(
-                                        model: model,
-                                        isSpecial: false,
-                                        index: index,
-                                      ),
-                                    );
-                                  },
-                                ),
+                              Text(
+                                "New Arrivals",
+                                style: R.textStyle.mediumMetropolis().copyWith(
+                                    fontSize: FetchPixels.getPixelHeight(16)),
                               ),
+                              getVerSpace(FetchPixels.getPixelHeight(10)),
+                              if (filteredProducts.isEmpty)
+                                SizedBox(
+                                  height: FetchPixels.getPixelHeight(290),
+                                  child: Center(
+                                    child: Text(
+                                      "No products available",
+                                      style: R.textStyle
+                                          .mediumMetropolis()
+                                          .copyWith(
+                                            fontSize:
+                                                FetchPixels.getPixelHeight(
+                                              14,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                SizedBox(
+                                  height: FetchPixels.getPixelHeight(290),
+                                  child: ListView.builder(
+                                    itemCount: filteredProducts.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      ProductModel model =
+                                          filteredProducts[index];
+                                      return getPaddingWidget(
+                                        EdgeInsets.all(10),
+                                        CateWidget(
+                                          model: model,
+                                          isSpecial: false,
+                                          index: index,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               getVerSpace(FetchPixels.getPixelHeight(10)),
                             ],
                           ),
@@ -621,11 +638,14 @@ class _HomeViewState extends State<HomeView> {
                                                 Get.to(
                                                     () => SpecialTailoryView());
                                               },
-                                              child: Text('Book an Artist'),
+                                              child: Text(
+                                                'Book an Artist',
+                                                style: TextStyle(
+                                                    color: R.colors.whiteColor),
+                                              ),
                                               style: ElevatedButton.styleFrom(
-                                                foregroundColor:
-                                                    Colors.purple[900],
-                                                backgroundColor: Colors.white,
+                                                foregroundColor: R.colors.theme,
+                                                backgroundColor: R.colors.theme,
                                                 textStyle:
                                                     TextStyle(fontSize: 16),
                                                 padding: EdgeInsets.symmetric(
@@ -677,25 +697,43 @@ class _HomeViewState extends State<HomeView> {
                                           fontSize:
                                               FetchPixels.getPixelHeight(16))),
                               getVerSpace(FetchPixels.getPixelHeight(10)),
-                              SizedBox(
-                                height: FetchPixels.getPixelHeight(290),
-                                child: ListView.builder(
-                                  itemCount: filteredProducts.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    ProductModel model =
-                                        filteredProducts[index];
-                                    return getPaddingWidget(
-                                      EdgeInsets.all(10),
-                                      CateWidget(
-                                        model: model,
-                                        isSpecial: false,
-                                        index: index,
-                                      ),
-                                    );
-                                  },
+                              if (filteredProducts.isEmpty)
+                                SizedBox(
+                                  height: FetchPixels.getPixelHeight(290),
+                                  child: Center(
+                                    child: Text(
+                                      "No products available",
+                                      style: R.textStyle
+                                          .mediumMetropolis()
+                                          .copyWith(
+                                            fontSize:
+                                                FetchPixels.getPixelHeight(
+                                              14,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                SizedBox(
+                                  height: FetchPixels.getPixelHeight(290),
+                                  child: ListView.builder(
+                                    itemCount: filteredProducts.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      ProductModel model =
+                                          filteredProducts[index];
+                                      return getPaddingWidget(
+                                        EdgeInsets.all(10),
+                                        CateWidget(
+                                          model: model,
+                                          isSpecial: false,
+                                          index: index,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),

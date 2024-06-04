@@ -124,12 +124,16 @@ import '../resources/resources.dart';
 //   }
 // }
 
-class CalendarScreen extends StatefulWidget {
+class HeenaCalendarScreen extends StatefulWidget {
+  final void Function(DateTime selectedDate) onDateSelected;
+
+  HeenaCalendarScreen({required this.onDateSelected});
+
   @override
-  _CalendarScreenState createState() => _CalendarScreenState();
+  _HeenaCalendarScreenState createState() => _HeenaCalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class _HeenaCalendarScreenState extends State<HeenaCalendarScreen> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -162,6 +166,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         _focusedDay = focusedDay;
       });
       _selectedEvents.value = _getEventsForDay(selectedDay);
+      widget.onDateSelected(selectedDay); // Invoke callback
     }
   }
 

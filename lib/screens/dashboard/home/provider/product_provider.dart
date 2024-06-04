@@ -13,8 +13,15 @@ import '../../../../services/product_service.dart';
 import '../model/product_model.dart';
 
 class ProductProvider extends ChangeNotifier {
+  // Function to notify listeners safely
+  void _notifyListeners() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
+
   update() {
-    notifyListeners();
+    _notifyListeners();
   }
 
   List<bool>? selections;
@@ -24,12 +31,21 @@ class ProductProvider extends ChangeNotifier {
 
   startLoader() {
     isLoading = true;
-    notifyListeners();
+    _notifyListeners();
   }
 
   stopLoader() {
     isLoading = false;
-    notifyListeners();
+    _notifyListeners();
+  }
+
+  double _totalPrice = 0.0;
+
+  double get totalPrice => _totalPrice;
+
+  void setTotalPrice(double price) {
+    _totalPrice = price;
+    _notifyListeners();
   }
 
   StreamSubscription? _ssProducts;
@@ -39,8 +55,8 @@ class ProductProvider extends ChangeNotifier {
   String selectedCatName = "All";
   String selectedSubCatName = "";
   bool isSubClicked = false;
-  String lat = "";
-  String lng = "";
+  String lat = "0.0";
+  String lng = "0.0";
   String locationAddress = "";
 
   List<MajorCategory> majorCatList = []; // List of Major Categories
@@ -59,19 +75,27 @@ class ProductProvider extends ChangeNotifier {
   Set<Marker> markers = {};
 
   Future fetchLocationAddress() async {
-    var placemarks =
-        await placemarkFromCoordinates(double.parse(lat), double.parse(lng));
-    locationAddress =
-        "${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
-    markers = {
-      Marker(
-        markerId: MarkerId('marker_1'),
-        position: LatLng(double.parse(lat), double.parse(lng)),
-        infoWindow: InfoWindow(title: "$locationAddress"),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-      ),
-    };
-    print("locationAddress $locationAddress");
+    try {
+      double latitude = double.tryParse(lat) ?? 0.0;
+      double longitude = double.tryParse(lng) ?? 0.0;
+      var placemarks = await placemarkFromCoordinates(latitude, longitude);
+      locationAddress =
+          "${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
+      markers = {
+        Marker(
+          markerId: MarkerId('marker_1'),
+          position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(title: "$locationAddress"),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+        ),
+      };
+      print("locationAddress $locationAddress");
+    } catch (e) {
+      print("Error fetching location address: $e");
+    } finally {
+      _notifyListeners();
+    }
   }
 
   getEarningRecord() async {
@@ -83,6 +107,7 @@ class ProductProvider extends ChangeNotifier {
           value.docs.map((e) => CartModel.fromJson(e.data())).toList();
       print(
           "total expenseList == ************************** ${earningsList.length}");
+      _notifyListeners();
     });
   }
 
@@ -96,6 +121,7 @@ class ProductProvider extends ChangeNotifier {
           value.docs.map((e) => CartModel.fromJson(e.data())).toList();
       print(
           "total expenseList == ************************** ${bookingsList.length}");
+      _notifyListeners();
     });
   }
 
@@ -143,6 +169,7 @@ class ProductProvider extends ChangeNotifier {
         .then((value) {
       brandNames = List.from(value.data()!["brandList"]);
       print("length of brandNames ${brandNames.length}");
+      _notifyListeners();
     });
     await FirebaseFirestore.instance
         .collection("brands")
@@ -151,6 +178,7 @@ class ProductProvider extends ChangeNotifier {
         .then((value) {
       occasionNames = List.from(value.data()!["occasionList"]);
       print("length of occasionNames ${occasionNames.length}");
+      _notifyListeners();
     });
     await FirebaseFirestore.instance
         .collection("brands")
@@ -159,6 +187,7 @@ class ProductProvider extends ChangeNotifier {
         .then((value) {
       sizesNames = List.from(value.data()!["cloth_size"]);
       print("length of sizesNames ${sizesNames.length}");
+      _notifyListeners();
     });
   }
 
@@ -176,6 +205,7 @@ class ProductProvider extends ChangeNotifier {
       majorCatNameList.add(majorCatList[i].catName!);
     }
     print("majorCatNameList $majorCatNameList");
+    _notifyListeners();
   }
 
   getSubCatNames() {
@@ -183,6 +213,7 @@ class ProductProvider extends ChangeNotifier {
       subCatNameList.add(subCatList[i].categoryName!);
     }
     print("subCatNameList $subCatNameList");
+    _notifyListeners();
   }
 
   List<ProductModel> products = [];

@@ -108,6 +108,31 @@ class AuthProvider extends ChangeNotifier {
     fetchProducts();
   }
 
+  List<DateTime> selectedDates = [];
+
+  void addSelectedDate(DateTime date) {
+    selectedDates.add(date);
+    print("Date added: $date");
+    print("Current selected dates: $selectedDates");
+    notifyListeners();
+  }
+
+  void removeSelectedDate(DateTime date) {
+    selectedDates.remove(date);
+    notifyListeners();
+  }
+
+  void updateSelectedDates(List<DateTime> dates) {
+    selectedDates = dates;
+    notifyListeners();
+  }
+
+  Future<void> updatedUser(UsersModel user) async {
+    // Update user logic here
+    userModel = user;
+    notifyListeners();
+  }
+
   Future<void> fetchProducts() async {
     startLoader();
     try {

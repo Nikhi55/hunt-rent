@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     var c = Provider.of<ProductProvider>(context, listen: false);
     c.fetchMajorData();
-    // getLocationInfo();
+    getLocationInfo();
     super.initState();
     Timer(const Duration(seconds: 3), () {
       Provider.of<AuthProvider>(context, listen: false).getCurrentUser();
@@ -80,9 +80,9 @@ class _SplashScreenState extends State<SplashScreen> {
             //     width: double.maxFinite, R.images.landing01, boxFit: BoxFit.fill),
             Center(
           child: getAssetImage(
-            R.images.logoHnr,
-            height: FetchPixels.getPixelHeight(150),
-            width: FetchPixels.getPixelWidth(150),
+            R.images.hrlogo,
+            // height: FetchPixels.getPixelHeight(250),
+            // width: double.infinity,
           ),
         )
         // getVerSpace(FetchPixels.getPixelHeight(10)),

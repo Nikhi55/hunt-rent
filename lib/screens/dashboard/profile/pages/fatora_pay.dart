@@ -106,33 +106,32 @@ class _FatoraPayState extends State<FatoraPay> {
           ),
         ),
       ),
-      body: Stack(
-        children: <Widget>[
-          WebViewWidget(controller: _webViewController),
-
-          // WebView(
-          //   initialUrl: url, // Use the modified URL with query parameters
-          //   setjavascriptMode: JavaScriptMode.unrestricted,
-          //   onWebViewCreated: (WebViewController webViewController) {
-          //     _webViewController.complete(webViewController);
-          //   },
-          //   onPageStarted: (String url) {
-          //     setState(() {
-          //       _isLoading = true;
-          //     });
-          //   },
-          //   onPageFinished: (String url) {
-          //     setState(() {
-          //       _isLoading = false;
-          //     });
-          //   },
-          // ),
-          if (_isLoading)
-            Center(
-              child: CircularProgressIndicator(), // Circular Progress Indicator
-            ),
-        ],
-      ),
+      // body: Stack(
+      //   children: <Widget>[
+      //     WebViewWidget(controller: _webViewController),
+      //     WebView(
+      //       initialUrl: url, // Use the modified URL with query parameters
+      //       setjavascriptMode: JavaScriptMode.unrestricted,
+      //       onWebViewCreated: (WebViewController webViewController) {
+      //         _webViewController.complete(webViewController);
+      //       },
+      //       onPageStarted: (String url) {
+      //         setState(() {
+      //           _isLoading = true;
+      //         });
+      //       },
+      //       onPageFinished: (String url) {
+      //         setState(() {
+      //           _isLoading = false;
+      //         });
+      //       },
+      //     ),
+      //     if (_isLoading)
+      //       Center(
+      //         child: CircularProgressIndicator(), // Circular Progress Indicator
+      //       ),
+      //   ],
+      // ),
     );
   }
 }

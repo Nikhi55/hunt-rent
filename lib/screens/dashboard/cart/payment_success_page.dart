@@ -11,7 +11,7 @@ import '../../../widgets/my_button.dart';
 import '../../auth/provider/auth_provider.dart';
 import '../dashboard_view.dart';
 import '../home/provider/product_provider.dart';
-import '../home/special_tailory/special_tailory_form.dart';
+import '../home/heena_service/special_tailory_form.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   const PaymentSuccessPage({Key? key}) : super(key: key);
@@ -57,107 +57,110 @@ class PaymentSuccessPage extends StatelessWidget {
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: getPaddingWidget(
           EdgeInsets.symmetric(horizontal: FetchPixels.getPixelWidth(20)),
-          Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Column(
-              children: [
-                getVerSpace(FetchPixels.getPixelHeight(30)),
-                Container(
-                  child: getAssetImage(
-                    boxFit: BoxFit.fill,
-                    R.images.done,
-                    scale: FetchPixels.getPixelHeight(3),
-                  ),
-                ),
-              ],
-            ),
-            getVerSpace(FetchPixels.getPixelHeight(30)),
-            Text("Booking Payment Successful",
-                textAlign: TextAlign.center,
-                style: R.textStyle
-                    .semiBoldMetropolis()
-                    .copyWith(fontSize: FetchPixels.getPixelHeight(16))),
-            getVerSpace(FetchPixels.getPixelHeight(20)),
-            Text(
-                "Your payment has been processed? Details of transaction are included below",
-                textAlign: TextAlign.center,
-                style: R.textStyle.regularMetropolis().copyWith(
-                    color: R.colors.blackColor.withOpacity(0.5),
-                    fontSize: FetchPixels.getPixelHeight(16))),
-            getVerSpace(FetchPixels.getPixelHeight(30)),
-            Container(
-              decoration: BoxDecoration(
-                  // color: R.colors.goldenColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(16)),
-              padding: EdgeInsets.all(16),
-              width: double.maxFinite,
-              child: Column(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Total Amount Paid",
-                          style: R.textStyle.mediumMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                      Text("QR 700",
-                          style: R.textStyle.semiBoldMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                    ],
+                  getVerSpace(FetchPixels.getPixelHeight(30)),
+                  Container(
+                    child: getAssetImage(
+                      boxFit: BoxFit.fill,
+                      R.images.done,
+                      scale: FetchPixels.getPixelHeight(3),
+                    ),
                   ),
-                  Divider(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Pay with",
-                          style: R.textStyle.mediumMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                      Text("Cash On Delivery",
-                          style: R.textStyle.semiBoldMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                    ],
-                  ),
-                  Divider(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Transaction Date ",
-                          style: R.textStyle.mediumMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                      Text(DateTime.now().toString(),
-                          style: R.textStyle.semiBoldMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                    ],
-                  ),
-                  Divider(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Transaction Number",
-                          style: R.textStyle.mediumMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                      Text("1574OISHD514",
-                          style: R.textStyle.semiBoldMetropolis().copyWith(
-                              color: R.colors.blackColor.withOpacity(0.5),
-                              fontSize: FetchPixels.getPixelHeight(14))),
-                    ],
-                  )
                 ],
               ),
-            ),
-            getVerSpace(FetchPixels.getPixelHeight(150)),
-            MyButton(
-                borderRadius: 50,
-                onTap: () {
-                  Get.to(DashboardView());
-                },
-                buttonText: "Okay")
-          ]),
+              getVerSpace(FetchPixels.getPixelHeight(30)),
+              Text("Booking Payment Successful",
+                  textAlign: TextAlign.center,
+                  style: R.textStyle
+                      .semiBoldMetropolis()
+                      .copyWith(fontSize: FetchPixels.getPixelHeight(16))),
+              getVerSpace(FetchPixels.getPixelHeight(20)),
+              Text(
+                  "Your payment has been processed? Details of transaction are included below",
+                  textAlign: TextAlign.center,
+                  style: R.textStyle.regularMetropolis().copyWith(
+                      color: R.colors.blackColor.withOpacity(0.5),
+                      fontSize: FetchPixels.getPixelHeight(16))),
+              getVerSpace(FetchPixels.getPixelHeight(30)),
+              Container(
+                decoration: BoxDecoration(
+                    // color: R.colors.goldenColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16)),
+                padding: EdgeInsets.all(16),
+                width: double.maxFinite,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Total Amount Paid",
+                            style: R.textStyle.mediumMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                        Text("QR 700",
+                            style: R.textStyle.semiBoldMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                      ],
+                    ),
+                    Divider(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Pay with",
+                            style: R.textStyle.mediumMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                        Text("Cash On Delivery",
+                            style: R.textStyle.semiBoldMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                      ],
+                    ),
+                    Divider(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Transaction Date ",
+                            style: R.textStyle.mediumMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                        Text(DateTime.now().toString(),
+                            style: R.textStyle.semiBoldMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                      ],
+                    ),
+                    Divider(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Transaction Number",
+                            style: R.textStyle.mediumMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                        Text("1574OISHD514",
+                            style: R.textStyle.semiBoldMetropolis().copyWith(
+                                color: R.colors.blackColor.withOpacity(0.5),
+                                fontSize: FetchPixels.getPixelHeight(14))),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              getVerSpace(FetchPixels.getPixelHeight(150)),
+              MyButton(
+                  borderRadius: 50,
+                  onTap: () {
+                    Get.to(DashboardView());
+                  },
+                  buttonText: "Okay")
+            ],
+          ),
         ),
       ),
     );

@@ -32,6 +32,8 @@ class _CategoryViewState extends State<CategoryView> {
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, ProductProvider>(
       builder: (context, auth, product, child) {
+        List<ProductModel> filteredProducts =
+            auth.isRenter ? auth.rentNowProducts : auth.buyNowProducts;
         return Column(
           children: [
             getVerSpace(FetchPixels.getPixelHeight(10)),
@@ -72,15 +74,15 @@ class _CategoryViewState extends State<CategoryView> {
                       )),
                       Spacer(),
                       Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Get.to(() => ForumView());
-                        },
-                        child: getAssetImage(R.images.chatoutline,
-                            // color: R.colors.buttonText,
-                            scale: 4.5),
-                      ),
-                      getHorSpace(FetchPixels.getPixelWidth(10)),
+                      // InkWell(
+                      //   onTap: () {
+                      //     Get.to(() => ForumView());
+                      //   },
+                      //   child: getAssetImage(R.images.chatoutline,
+                      //       // color: R.colors.buttonText,
+                      //       scale: 4.5),
+                      // ),
+                      // getHorSpace(FetchPixels.getPixelWidth(10)),
                       InkWell(
                         onTap: () {
                           Get.to(() => WishList());
@@ -281,26 +283,9 @@ class _CategoryViewState extends State<CategoryView> {
                                           FetchPixels.getPixelWidth(10),
                                       mainAxisSpacing:
                                           FetchPixels.getPixelHeight(5)),
-                              itemCount: searchController.text.isEmpty
-                                  ? product.products
-                                      .where((element) =>
-                                          element.productType ==
-                                              ProductsTypes.sell.name ||
-                                          element.productType ==
-                                              ProductsTypes.rent.name)
-                                      .length
-                                  : searchResults1.length,
+                              itemCount: filteredProducts.length,
                               itemBuilder: (context, index) {
-                                ProductModel model =
-                                    searchController.text.isEmpty
-                                        ? product.products
-                                            .where((element) =>
-                                                element.productType ==
-                                                    ProductsTypes.sell.name ||
-                                                element.productType ==
-                                                    ProductsTypes.rent.name)
-                                            .toList()[index]
-                                        : searchResults1[index];
+                                ProductModel model = filteredProducts[index];
                                 return getPaddingWidget(
                                   EdgeInsets.only(
                                       right: FetchPixels.getPixelWidth(10)),
@@ -327,69 +312,38 @@ class _CategoryViewState extends State<CategoryView> {
                                         FetchPixels.getPixelHeight(5)),
                             itemCount: product.isSubClicked != true
                                 ? product.selectedCatName == "All"
-                                    ? product.products
-                                        .where((element) =>
-                                            element.productType ==
-                                                ProductsTypes.sell.name ||
-                                            element.productType ==
-                                                ProductsTypes.rent.name)
-                                        .length
-                                    : product.products
+                                    ? filteredProducts.length
+                                    : filteredProducts
                                         .where((element) =>
                                             element.categoryName ==
                                             product.selectedCatName)
-                                        .where((element) =>
-                                            element.productType ==
-                                                ProductsTypes.sell.name ||
-                                            element.productType ==
-                                                ProductsTypes.rent.name)
                                         .length
-                                : product.products
+                                : filteredProducts
                                     .where((element) =>
                                         element.subCategoryName ==
                                         product.selectedSubCatName)
-                                    .where((element) =>
-                                        element.productType ==
-                                            ProductsTypes.sell.name ||
-                                        element.productType ==
-                                            ProductsTypes.rent.name)
                                     .length,
                             itemBuilder: (BuildContext ctx, index) {
                               ProductModel model = product.isSubClicked != true
                                   ? product.selectedCatName == "All"
-                                      ? product.products
-                                          .where((element) =>
-                                              element.productType ==
-                                                  ProductsTypes.sell.name ||
-                                              element.productType ==
-                                                  ProductsTypes.rent.name)
-                                          .toList()[index]
-                                      : product.products
+                                      ? filteredProducts[index]
+                                      : filteredProducts
                                           .where((element) =>
                                               element.categoryName ==
                                               product.selectedCatName)
-                                          .where((element) =>
-                                              element.productType ==
-                                                  ProductsTypes.sell.name ||
-                                              element.productType ==
-                                                  ProductsTypes.rent.name)
                                           .toList()[index]
-                                  : product.products
+                                  : filteredProducts
                                       .where((element) =>
                                           element.subCategoryName ==
                                           product.selectedSubCatName)
-                                      .where((element) =>
-                                          element.productType ==
-                                              ProductsTypes.sell.name ||
-                                          element.productType ==
-                                              ProductsTypes.rent.name)
                                       .toList()[index];
                               return CateWidget(
                                 model: model,
                                 isSpecial: false,
                                 index: index,
                               );
-                            }),
+                            },
+                          ),
                   ),
                 ],
               ),

@@ -92,6 +92,9 @@ class AppImages {
   String emptyRentals = 'rentals-empty.png';
   String heenaImg = 'heenaImg.png';
   String heenaImg2 = 'heenaImg2.png';
+  String hrlogo = 'hrlogo.png';
+  String hrlogo2 = 'hrlogo2.png';
+  String hrlogo3 = 'hrlogo3.png';
 
   //
   String chatoutline = 'chatoutline.png';

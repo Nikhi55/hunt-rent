@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/model/product_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/widgets/product_detail_page.dart';
@@ -160,7 +162,7 @@ class FeaturedWidget extends StatelessWidget {
                                                     FetchPixels.getPixelHeight(
                                                         12))),
                                 getVerSpace(FetchPixels.getPixelWidth(5)),
-                                Text("QR ${model.productPrice!}",
+                                Text("QR ${model.productPrice}",
                                     style: R.textStyle
                                         .semiBoldMetropolis()
                                         .copyWith(
@@ -259,32 +261,48 @@ class FeaturedWidget extends StatelessWidget {
   }
 }
 
-class FeaturedWidget1 extends StatelessWidget {
+class FeaturedWidget1 extends StatefulWidget {
   final ProductModel model;
   final bool isCart;
   final bool isOrderHistory;
   int? index1;
 
-  FeaturedWidget1(
-      {super.key,
-      required this.model,
-      required this.isCart,
-      this.index1,
-      this.isOrderHistory = false});
+  FeaturedWidget1({
+    super.key,
+    required this.model,
+    required this.isCart,
+    this.index1,
+    this.isOrderHistory = false,
+  });
 
+  @override
+  State<FeaturedWidget1> createState() => _FeaturedWidget1State();
+}
+
+class _FeaturedWidget1State extends State<FeaturedWidget1> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(
       builder: (context, auth, child) {
+        double? totalPrice = auth.userModel.cart!
+            .firstWhere((element) => element.productId == widget.model.docId,
+                orElse: () => UserCart(
+                      startDate: Timestamp.now(),
+                      endDate: Timestamp.now(),
+                      productId: widget.model.docId,
+                      price: double.tryParse(widget.model.productPrice!) ?? 0.0,
+                    ))
+            .price;
+
         return InkWell(
-          onTap: () {
-            Get.to(() => ProductDetails(
-                  model: model,
-                  isCart: true,
-                ));
-          },
+          // onTap: () {
+          //   Get.to(() => ProductDetails(
+          //         model: model,
+          //         isCart: true,
+          //       ));
+          // },
           child: Container(
-            padding: EdgeInsets.all(FetchPixels.getPixelHeight(10)),
+            padding: EdgeInsets.all(FetchPixels.getPixelHeight(15)),
             margin:
                 EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(1)),
             decoration: BoxDecoration(
@@ -300,7 +318,7 @@ class FeaturedWidget1 extends StatelessWidget {
                       borderRadius:
                           BorderRadius.circular(FetchPixels.getPixelHeight(10)),
                       image: getDecorationNetworkImage(
-                          context, model.productImage!.first,
+                          context, widget.model.productImage!.first,
                           fit: BoxFit.cover),
                       color: R.colors.blackColor),
                 ),
@@ -311,7 +329,7 @@ class FeaturedWidget1 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // getVerSpace(FetchPixels.getPixelHeight(15)),
-                      Text(model.productName!,
+                      Text(widget.model.productName!,
                           style: R.textStyle.mediumMetropolis().copyWith(
                               fontSize: FetchPixels.getPixelHeight(16))),
                       getVerSpace(FetchPixels.getPixelHeight(10)),
@@ -389,11 +407,12 @@ class FeaturedWidget1 extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Column(
-                              crossAxisAlignment: model.productType == "sell"
-                                  ? CrossAxisAlignment.start
-                                  : CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                                  widget.model.productType == "sell"
+                                      ? CrossAxisAlignment.start
+                                      : CrossAxisAlignment.start,
                               children: [
-                                model.productType == "sell"
+                                widget.model.productType == "sell"
                                     ? Text("Retail Price",
                                         style: R.textStyle
                                             .regularMetropolis()
@@ -409,7 +428,7 @@ class FeaturedWidget1 extends StatelessWidget {
                                                     FetchPixels.getPixelHeight(
                                                         12))),
                                 getVerSpace(FetchPixels.getPixelWidth(5)),
-                                Text("QR ${model.productPrice!}",
+                                Text("QR $totalPrice",
                                     style: R.textStyle
                                         .semiBoldMetropolis()
                                         .copyWith(
@@ -467,17 +486,18 @@ class FeaturedWidget1 extends StatelessWidget {
                       )
                     : InkWell(
                         onTap: () async {
-                          if (isCart == true) {
-                            auth.userModel.cart!.removeAt(index1!);
-                            print("This: ${auth.userModel.cart!.length}");
-                            await auth.updateUser(auth.userModel);
-                          } else {
-                            print("Enter in Else");
-                            auth.userModel.favrt!.contains(model.docId)
-                                ? auth.userModel.favrt!.remove(model.docId)
-                                : auth.userModel.favrt!.add(model.docId);
-                            await auth.updateUser(auth.userModel);
-                          }
+                          setState(() {
+                            if (widget.isCart == true) {
+                              auth.userModel.cart!.removeAt(widget.index1!);
+                            } else {
+                              print("Enter in Else");
+                              auth.userModel.favrt!.contains(widget.model.docId)
+                                  ? auth.userModel.favrt!
+                                      .remove(widget.model.docId)
+                                  : auth.userModel.favrt!
+                                      .add(widget.model.docId);
+                            }
+                          });
                           Get.snackbar(
                               backgroundColor: R.colors.whiteColor,
                               " ",
@@ -491,7 +511,8 @@ class FeaturedWidget1 extends StatelessWidget {
                         child: Icon(
                           Icons.cancel,
                           color: R.colors.fillColor,
-                        )),
+                        ),
+                      ),
               ],
             ),
           ),

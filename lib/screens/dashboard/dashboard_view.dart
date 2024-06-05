@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hunt_and_rent/base/resizer/fetch_pixels.dart';
 import 'package:hunt_and_rent/forum/forum_page.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:hunt_and_rent/resources/resources.dart';
+import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/cart/cart_page.dart';
 import 'package:hunt_and_rent/screens/dashboard/category/category_page.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/home_page.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
-import 'package:hunt_and_rent/screens/dashboard/profile/pages/my_whish_list.dart';
-import 'package:hunt_and_rent/screens/dashboard/profile/pages/notifications/notifications.dart';
 import 'package:hunt_and_rent/screens/dashboard/profile/profile_page.dart';
-import 'package:hunt_and_rent/screens/dashboard/renter_pages/analytics/analytics_view.dart';
-import 'package:hunt_and_rent/screens/dashboard/renter_pages/collections/collections_view.dart';
-import 'package:hunt_and_rent/screens/dashboard/renter_pages/renter_home/renter_home_view.dart';
-import 'package:hunt_and_rent/screens/dashboard/renter_pages/renter_profile/renter_profile_view.dart';
 import 'package:provider/provider.dart';
-
-import '../../base/resizer/fetch_pixels.dart';
-import '../../base/widget_utils.dart';
-import '../../resources/resources.dart';
-import '../auth/provider/auth_provider.dart';
-import 'home/favrt_produects.dart';
-import 'home/home_page.dart';
 
 class DashboardView extends StatefulWidget {
   final int index;
@@ -57,210 +50,81 @@ class _DashboardViewState extends State<DashboardView> {
       builder: (context, authProvider, child) {
         return Scaffold(
           key: _key,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: InkWell(
-            onTap: () {
-              authProvider.toggleRenterStatus();
-            },
-            child: Container(
-              height: FetchPixels.getPixelHeight(90),
-              width: FetchPixels.getPixelWidth(90),
-              decoration: ShapeDecoration(
-                color: R.colors.whiteColor,
-                shape: OvalBorder(),
-              ),
-              child: Center(
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  height: FetchPixels.getPixelHeight(70),
-                  width: FetchPixels.getPixelWidth(70),
-                  decoration: const ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(-0.21, -0.98),
-                      end: Alignment(0.21, 0.98),
-                      colors: [
-                        Color(0xFFE7A4F7),
-                        Color(0xFF460D54),
-                        Color(0xFFBE64D4)
-                      ],
-                    ),
-                    shape: OvalBorder(),
-                  ),
-                  child: Center(
-                    child: Text(
-                      authProvider.isRenter ? "BUY NOW" : "RENT NOW",
-                      style: R.textStyle.mediumMetropolis().copyWith(
-                            color: R.colors.whiteColor,
-                            fontSize: FetchPixels.getPixelHeight(10),
-                          ),
-                    ),
-                  ),
+          body: SafeArea(
+            child: Stack(
+              children: [
+                PageView(
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (page) {
+                    setState(() {
+                      currentPage = page;
+                    });
+                  },
+                  children: [
+                    HomeView(),
+                    CategoryView(),
+                    CartView(),
+                    ProfileView(),
+                  ],
                 ),
-              ),
+              ],
             ),
           ),
-          // appBar: AppBar(
-          //   actions: [
-          //     getAssetImage(R.images.logo01,
-          //         // color: R.colors.buttonText,
-          //         height: 55,
-          //         boxFit: BoxFit.fitHeight),
-          //     Spacer(),
-          //     Spacer(),
-          //     InkWell(
-          //       onTap: () {
-          //         Get.to(() => ForumView());
-          //       },
-          //       child: getAssetImage(R.images.chatoutline,
-          //           // color: R.colors.buttonText,
-          //           scale: 4.5),
-          //     ),
-          //     getHorSpace(FetchPixels.getPixelWidth(10)),
-          //     InkWell(
-          //       onTap: () {
-          //         Get.to(() => WishList());
-          //       },
-          //       child: getAssetImage(R.images.favOutline,
-          //           // color: R.colors.buttonText,
-          //           scale: 4.5),
-          //     ),
-          //     getHorSpace(FetchPixels.getPixelWidth(10)),
-          //     InkWell(
-          //       onTap: () {
-          //         Get.to(() => NotificationsView());
-          //       },
-          //       child: getAssetImage(R.images.notificationOutline,
-          //           // color: R.colors.buttonText,
-          //           scale: 4.5),
-          //     ),
-          //     getHorSpace(FetchPixels.getPixelWidth(20)),
-          //   ],
-          // ),
-          // automaticallyImplyLeading: false,
-          // backgroundColor: R.colors.transparent,
-          // elevation: 0.0,
-          // title: Align(
-          //   alignment: Alignment.center,
-          //   child: Text(
-          //     currentPage == 0
-          //         ? "Summary Analytics"
-          //         : currentPage == 1
-          //             ? "My Collection"
-          //             : currentPage == 2
-          //                 ? "Analytics & Report"
-          //                 : "My Profile",
-          //     style: R.textStyle
-          //         .semiBoldMetropolis()
-          //         .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
-          //   ),
-          // ),
-
-          body: Container(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  R.colors.whiteColor,
-                  R.colors.whiteColor,
-                  R.colors.whiteColor,
-                  R.colors.containerBG1,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: SafeArea(
-              child: Stack(
-                children: [
-                  PageView(
-                    controller: pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (page) {
-                      setState(() {
-                        currentPage = page;
-                      });
-                    },
-                    children: [
-                      HomeView(),
-                      CategoryView(),
-                      CartView(),
-                      ProfileView(),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      height: FetchPixels.getPixelHeight(60),
-                      width: double.maxFinite,
-                      color: R.colors.whiteColor,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          tab(authProvider, 0, R.images.home,
-                              R.images.selectedHome),
-                          tab(authProvider, 1, R.images.category,
-                              R.images.selectedCategory),
-                          getHorSpace(FetchPixels.getPixelWidth(10)),
-                          tab(authProvider, 2, R.images.cart,
-                              R.images.selectedCart),
-                          tab(authProvider, 3, R.images.profile,
-                              R.images.selectedProfile),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          bottomNavigationBar: ConvexAppBar(
+            style: TabStyle.fixedCircle,
+            backgroundColor: Colors.white,
+            activeColor: Colors.pink,
+            color: Colors.black,
+            items: [
+              TabItem(icon: Icons.home, title: 'Home'),
+              TabItem(icon: Icons.category, title: 'Categories'),
+              TabItem(
+                icon:
+                    _centerIcon(authProvider.isRenter ? "BUY NOW" : "RENT NOW"),
+              ), // Middle item with action
+              TabItem(icon: Icons.shopping_cart, title: 'Cart'),
+              TabItem(icon: Icons.person, title: 'Profile'),
+            ],
+            initialActiveIndex: currentPage < 2 ? currentPage : currentPage + 1,
+            onTap: (int index) {
+              if (index == 2) {
+                // Middle item action
+                authProvider.toggleRenterStatus();
+                setState(() {
+                  // Update the middle item title based on new status
+                });
+              } else {
+                setState(() {
+                  currentPage = index < 2 ? index : index - 1;
+                  pageController.jumpToPage(currentPage);
+                });
+              }
+            },
           ),
         );
       },
     );
   }
 
-  Widget tab(
-      AuthProvider authProvider, int index, String image, String image1) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          currentPage = index;
-        });
-        pageController.jumpToPage(index);
-        authProvider.update();
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            height: FetchPixels.getPixelHeight(25),
-            width: FetchPixels.getPixelWidth(25),
-            decoration: BoxDecoration(
-              image: getDecorationAssetImage(
-                context,
-                currentPage == index ? image1 : image,
-              ),
-            ),
+  Widget _centerIcon(String text) {
+    return Container(
+      height: 48,
+      width: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.pink,
+      ),
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
           ),
-          getVerSpace(FetchPixels.getPixelHeight(2)),
-          Text(
-            index == 0
-                ? "Home"
-                : index == 1
-                    ? "Categories"
-                    : index == 2
-                        ? "Cart"
-                        : "Profile",
-            style: R.textStyle.regularMetropolis().copyWith(
-                  fontSize: FetchPixels.getPixelHeight(12),
-                  color: currentPage == index
-                      ? R.colors.blackColor
-                      : R.colors.theme,
-                ),
-          ),
-        ],
+        ),
       ),
     );
   }

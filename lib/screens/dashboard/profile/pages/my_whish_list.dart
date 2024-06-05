@@ -20,6 +20,12 @@ class WishList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<ProductProvider, AuthProvider>(
       builder: (context, product, auth, child) {
+        List<ProductModel> filteredProducts =
+            auth.isRenter ? auth.rentNowProducts : auth.buyNowProducts;
+
+        filteredProducts = filteredProducts
+            .where((element) => auth.userModel.favrt!.contains(element.docId))
+            .toList();
         return Scaffold(
           appBar: AppBar(
               leading: InkWell(
@@ -52,68 +58,44 @@ class WishList extends StatelessWidget {
                 // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   getVerSpace(FetchPixels.getPixelHeight(10)),
-                  product.products
-                              .where((element) =>
-                                  auth.userModel.favrt!.contains(element.docId))
-                              .where((element) =>
-                                  element.productType ==
-                                      ProductsTypes.sell.name ||
-                                  element.productType ==
-                                      ProductsTypes.rent.name)
-                              .length ==
-                          0
-                      ? Align(
-                          alignment: Alignment.bottomCenter,
-                          child: MyButton(
-                              color: R.colors.blackColor,
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return DashboardView(
-                                      index: 1,
-                                    );
+                  filteredProducts.isEmpty
+                      ? Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              getAssetImage(
+                                R.images.emptywhislist,
+                                height: FetchPixels.getPixelHeight(100),
+                                width: FetchPixels.getPixelWidth(100),
+                              ),
+                              Text('Your whislist is empty'),
+                              Text('Explore more and shortlist more items'),
+                              getVerSpace(FetchPixels.getPixelHeight(10)),
+                              MyButton(
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return DashboardView(
+                                          index: 1,
+                                        );
+                                      },
+                                    ));
                                   },
-                                ));
-                              },
-                              buttonText: "Hunt Now"),
+                                  buttonText: 'Start Shopping')
+                            ],
+                          ),
                         )
                       : SizedBox(),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: product.products
-                          .where((element) =>
-                              auth.userModel.favrt!.contains(element.docId))
-                          .where((element) =>
-                              element.productType == ProductsTypes.sell.name ||
-                              element.productType == ProductsTypes.rent.name)
-                          .length,
+                      itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
-                        ProductModel model = product.products
-                            .where((element) =>
-                                auth.userModel.favrt!.contains(element.docId))
-                            .where((element) =>
-                                element.productType ==
-                                    ProductsTypes.sell.name ||
-                                element.productType == ProductsTypes.rent.name)
-                            .toList()[index];
-                        return product.products
-                                .where((element) => auth.userModel.favrt!
-                                    .contains(element.docId))
-                                .where((element) =>
-                                    element.productType ==
-                                        ProductsTypes.sell.name ||
-                                    element.productType ==
-                                        ProductsTypes.rent.name)
-                                .isEmpty
-                            ? Center(
-                                child: Text(
-                                "0",
-                                style: TextStyle(color: R.colors.theme),
-                              ))
-                            : FeaturedWidget(
-                                model: model,
-                                isCart: true,
-                              );
+                        ProductModel model = filteredProducts[index];
+                        return FeaturedWidget(
+                          model: model,
+                          isCart: true,
+                        );
                       },
                     ),
                   )

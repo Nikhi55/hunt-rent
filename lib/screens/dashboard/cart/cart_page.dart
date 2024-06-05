@@ -81,11 +81,31 @@ class _CartViewState extends State<CartView> {
                 getVerSpace(FetchPixels.getPixelHeight(10)),
                 cartProducts.isEmpty
                     ? Expanded(
-                        child: getAssetImage(
-                        R.images.emptyCart,
-                        height: FetchPixels.getPixelHeight(200),
-                        width: FetchPixels.getPixelWidth(200),
-                      ))
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            getAssetImage(
+                              R.images.Cartempty,
+                              height: FetchPixels.getPixelHeight(100),
+                              width: FetchPixels.getPixelWidth(100),
+                            ),
+                            Text('Your cart is empty'),
+                            Text('Explore more and add some Items'),
+                            getVerSpace(FetchPixels.getPixelHeight(10)),
+                            MyButton(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return DashboardView(
+                                        index: 1,
+                                      );
+                                    },
+                                  ));
+                                },
+                                buttonText: 'Start Shopping')
+                          ],
+                        ),
+                      )
                     : Expanded(
                         child: ListView.builder(
                           itemCount: cartProducts.length,
@@ -106,35 +126,27 @@ class _CartViewState extends State<CartView> {
                                   indent: 10,
                                   endIndent: 10,
                                 ),
+                                getVerSpace(FetchPixels.getPixelHeight(10)),
+                                MyButton(
+                                  onTap: () {
+                                    ProductModel model = cartProducts.first;
+                                    Get.to(
+                                      () => CheckOutPage(
+                                        model: model,
+                                      ),
+                                    );
+                                  },
+                                  buttonText: "CHECKOUT",
+                                  borderRadius: 40,
+                                  height: FetchPixels.getPixelHeight(50),
+                                  textSize: 18,
+                                ),
                               ],
                             );
                           },
                         ),
                       ),
-                getVerSpace(FetchPixels.getPixelHeight(10)),
-                MyButton(
-                  onTap: () {
-                    if (cartProducts.isEmpty) {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return DashboardView(
-                            index: 1,
-                          );
-                        },
-                      ));
-                    } else {
-                      ProductModel model = cartProducts.first;
-                      Get.to(() => CheckOutPage(
-                            model: model,
-                          ));
-                    }
-                  },
-                  buttonText: cartProducts.isEmpty ? "Hunt Now" : "CHECKOUT",
-                  borderRadius: 40,
-                  height: FetchPixels.getPixelHeight(50),
-                  textSize: 18,
-                ),
-                getVerSpace(FetchPixels.getPixelHeight(120)),
+                // getVerSpace(FetchPixels.getPixelHeight(120)),
               ],
             ),
           ),

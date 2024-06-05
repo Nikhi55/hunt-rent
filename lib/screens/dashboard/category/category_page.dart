@@ -34,6 +34,23 @@ class _CategoryViewState extends State<CategoryView> {
       builder: (context, auth, product, child) {
         List<ProductModel> filteredProducts =
             auth.isRenter ? auth.rentNowProducts : auth.buyNowProducts;
+
+        filteredProducts = filteredProducts
+            .where((element) => auth.userModel.favrt!.contains(element.docId))
+            .toList();
+
+        List<ProductModel> finalFilteredProducts = filteredProducts;
+        if (product.isSubClicked) {
+          finalFilteredProducts = filteredProducts
+              .where((element) =>
+                  element.subCategoryName == product.selectedSubCatName)
+              .toList();
+        } else if (product.selectedCatName != "All") {
+          finalFilteredProducts = filteredProducts
+              .where(
+                  (element) => element.categoryName == product.selectedCatName)
+              .toList();
+        }
         return Column(
           children: [
             getVerSpace(FetchPixels.getPixelHeight(10)),
@@ -193,18 +210,21 @@ class _CategoryViewState extends State<CategoryView> {
                     child: Row(
                       children: [
                         InkWell(
-                            onTap: () {
-                              auth.isClicked = !auth.isClicked;
-                              if (product.isSubClicked == true) {
-                                print("sub clicked ${product.isSubClicked}");
-                                product.isSubClicked = false;
+                          onTap: () {
+                            auth.isClicked = !auth.isClicked;
+                            if (product.isSubClicked == true) {
+                              print("sub clicked ${product.isSubClicked}");
+                              product.isSubClicked = false;
 
-                                product.update();
-                              }
-                              auth.update();
-                            },
-                            child: getAssetImage(R.images.lines,
-                                scale: FetchPixels.getPixelHeight(4))),
+                              product.update();
+                            }
+                            auth.update();
+                          },
+                          child: getAssetImage(
+                            R.images.lines,
+                            scale: FetchPixels.getPixelHeight(4),
+                          ),
+                        ),
                         getHorSpace(FetchPixels.getPixelWidth(10)),
                         Expanded(
                           child: ListView.builder(
@@ -268,7 +288,8 @@ class _CategoryViewState extends State<CategoryView> {
                                 product,
                               );
                             },
-                          ))
+                          ),
+                        )
                       : SizedBox(),
                   Expanded(
                     child: searchController.text != ""
@@ -310,33 +331,9 @@ class _CategoryViewState extends State<CategoryView> {
                                         FetchPixels.getPixelWidth(10),
                                     mainAxisSpacing:
                                         FetchPixels.getPixelHeight(5)),
-                            itemCount: product.isSubClicked != true
-                                ? product.selectedCatName == "All"
-                                    ? filteredProducts.length
-                                    : filteredProducts
-                                        .where((element) =>
-                                            element.categoryName ==
-                                            product.selectedCatName)
-                                        .length
-                                : filteredProducts
-                                    .where((element) =>
-                                        element.subCategoryName ==
-                                        product.selectedSubCatName)
-                                    .length,
+                            itemCount: finalFilteredProducts.length,
                             itemBuilder: (BuildContext ctx, index) {
-                              ProductModel model = product.isSubClicked != true
-                                  ? product.selectedCatName == "All"
-                                      ? filteredProducts[index]
-                                      : filteredProducts
-                                          .where((element) =>
-                                              element.categoryName ==
-                                              product.selectedCatName)
-                                          .toList()[index]
-                                  : filteredProducts
-                                      .where((element) =>
-                                          element.subCategoryName ==
-                                          product.selectedSubCatName)
-                                      .toList()[index];
+                              ProductModel model = finalFilteredProducts[index];
                               return CateWidget(
                                 model: model,
                                 isSpecial: false,

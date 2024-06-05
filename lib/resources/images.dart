@@ -95,6 +95,8 @@ class AppImages {
   String hrlogo = 'hrlogo.png';
   String hrlogo2 = 'hrlogo2.png';
   String hrlogo3 = 'hrlogo3.png';
+  String Cartempty = 'emptycart.png';
+  String emptywhislist = 'whislist.png';
 
   //
   String chatoutline = 'chatoutline.png';

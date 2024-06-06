@@ -74,7 +74,7 @@ class _DashboardViewState extends State<DashboardView> {
           bottomNavigationBar: ConvexAppBar(
             style: TabStyle.fixedCircle,
             backgroundColor: Colors.white,
-            activeColor: Colors.pink,
+            activeColor: R.colors.theme,
             color: Colors.black,
             items: [
               TabItem(icon: Icons.home, title: 'Home'),

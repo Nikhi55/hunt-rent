@@ -19,4 +19,5 @@ class AppColors {
   Color goldenColor = const Color(0xFFFFA615);
   Color redColor = const Color(0xFFFF0431);
   Color summary = const Color(0xFFFABCFF);
+  Color buyrentbutton = const Color.fromRGBO(231, 164, 248, 1.000);
 }

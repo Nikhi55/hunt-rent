@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:hunt_and_rent/resources/resources.dart';
 import 'package:hunt_and_rent/routes/app_pages.dart';
 import 'package:hunt_and_rent/routes/app_routes.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';

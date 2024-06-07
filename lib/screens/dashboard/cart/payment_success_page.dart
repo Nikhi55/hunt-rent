@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -152,7 +151,7 @@ class PaymentSuccessPage extends StatelessWidget {
                   ],
                 ),
               ),
-              getVerSpace(FetchPixels.getPixelHeight(150)),
+              // getVerSpace(FetchPixels.getPixelHeight(150)),
               MyButton(
                   borderRadius: 50,
                   onTap: () {

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
@@ -16,15 +15,10 @@ import 'package:provider/provider.dart';
 
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../base/widget_utils.dart';
-import '../../../dialog/on_tap_dialog.dart';
 import '../../../resources/resources.dart';
-import '../../../routes/app_routes.dart';
 import '../../../widgets/my_button.dart';
-import '../home/model/category_model.dart';
 import '../home/model/product_model.dart';
 import '../home/widgets/featured_product_widget.dart';
-import '../profile/pages/fatora_pay.dart';
-import 'model/cart_model.dart';
 
 class CheckOutPage extends StatefulWidget {
   final ProductModel model;
@@ -120,41 +114,48 @@ class _CheckOutPageState extends State<CheckOutPage> {
       //     .where((element) => auth.cartDocList.contains(element.docId))) {
       //   totalValue += int.parse(product.productPrice!);
       // }
-      double? totalPrice = auth.userModel.cart!
-          .firstWhere((element) => element.productId == widget.model.docId,
-              orElse: () => UserCart(
-                    startDate: Timestamp.now(),
-                    endDate: Timestamp.now(),
-                    productId: widget.model.docId,
-                    price: double.tryParse(widget.model.productPrice!) ?? 0.0,
-                  ))
-          .price;
+      // double? totalPrice = auth.userModel.cart!
+      //     .firstWhere((element) => element.productId == widget.model.docId,
+      //         orElse: () => UserCart(
+      //               startDate: Timestamp.now(),
+      //               endDate: Timestamp.now(),
+      //               productId: widget.model.docId,
+      //               price: double.tryParse(widget.model.productPrice!) ?? 0.0,
+      //             ))
+      //     .price;
       // double totalPrice = widget.totalPrice;
+      double totalPrice = 0.0;
+      for (var cartItem in auth.userModel.cart!) {
+        var product = pro.products
+            .firstWhere((element) => element.docId == cartItem.productId);
+        totalPrice += double.parse(product.productPrice!);
+      }
       return Scaffold(
         appBar: AppBar(
-            leading: InkWell(
-              onTap: () {
-                Get.back();
-              },
-              child: Icon(
-                Icons.arrow_back_ios_rounded,
-                size: FetchPixels.getPixelHeight(25),
-                color: R.colors.blackColor,
-              ),
+          leading: InkWell(
+            onTap: () {
+              Get.back();
+            },
+            child: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: FetchPixels.getPixelHeight(25),
+              color: R.colors.blackColor,
             ),
-            iconTheme: IconThemeData(
-              color: R.colors.whiteColor, //change your color here
-            ),
-            automaticallyImplyLeading: false,
-            backgroundColor: R.colors.transparent,
-            elevation: 0.0,
-            centerTitle: true,
-            title: Text(
-              "Checkout",
-              style: R.textStyle
-                  .mediumMetropolis()
-                  .copyWith(fontSize: FetchPixels.getPixelHeight(18)),
-            )),
+          ),
+          iconTheme: IconThemeData(
+            color: R.colors.whiteColor, //change your color here
+          ),
+          automaticallyImplyLeading: false,
+          backgroundColor: R.colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text(
+            "Checkout",
+            style: R.textStyle.mediumMetropolis().copyWith(
+                  fontSize: FetchPixels.getPixelHeight(18),
+                ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -195,8 +196,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: R.colors.fillColor)),
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: R.colors.fillColor),
+                  ),
                   borderOnForeground: true,
                   color: R.colors.whiteColor,
                   elevation: 0.4,
@@ -206,7 +208,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.symmetric(
-                        horizontal: FetchPixels.getPixelWidth(10)),
+                      horizontal: FetchPixels.getPixelWidth(10),
+                    ),
                     children: [
                       getVerSpace(FetchPixels.getPixelHeight(10)),
                       ListTile(
@@ -456,7 +459,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     fontSize: FetchPixels.getPixelHeight(14)),
                               ),
                               Text(
-                                "QR $totalPrice",
+                                "QR \$${totalPrice.toStringAsFixed(2)}",
                                 style: R.textStyle.mediumMetropolis().copyWith(
                                     fontSize: FetchPixels.getPixelHeight(14)),
                               ),

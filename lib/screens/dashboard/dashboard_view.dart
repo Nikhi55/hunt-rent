@@ -81,7 +81,7 @@ class _DashboardViewState extends State<DashboardView> {
               TabItem(icon: Icons.category, title: 'Categories'),
               TabItem(
                 icon:
-                    _centerIcon(authProvider.isRenter ? "BUY NOW" : "RENT NOW"),
+                    _centerIcon(authProvider.isRenter ? "RENT NOW" : "BUY NOW"),
               ), // Middle item with action
               TabItem(icon: Icons.shopping_cart, title: 'Cart'),
               TabItem(icon: Icons.person, title: 'Profile'),
@@ -113,14 +113,14 @@ class _DashboardViewState extends State<DashboardView> {
       width: 48,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.pink,
+        color: R.colors.buyrentbutton,
       ),
       child: Center(
         child: Text(
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 10,
             fontWeight: FontWeight.bold,
           ),

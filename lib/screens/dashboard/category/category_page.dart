@@ -104,9 +104,11 @@ class _CategoryViewState extends State<CategoryView> {
                         onTap: () {
                           Get.to(() => WishList());
                         },
-                        child: getAssetImage(R.images.favOutline,
-                            // color: R.colors.buttonText,
-                            scale: 4.5),
+                        child: getAssetImage(
+                          R.images.favOutline,
+                          // color: R.colors.buttonText,
+                          scale: 4.5,
+                        ),
                       ),
                       getHorSpace(FetchPixels.getPixelWidth(10)),
                       InkWell(

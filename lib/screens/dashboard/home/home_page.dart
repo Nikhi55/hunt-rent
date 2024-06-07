@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hunt_and_rent/base/resizer/fetch_pixels.dart';
 import 'package:hunt_and_rent/base/widget_utils.dart';
-import 'package:hunt_and_rent/forum/forum_page.dart';
 import 'package:hunt_and_rent/screens/dashboard/dashboard_view.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/model/category_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/model/product_model.dart';

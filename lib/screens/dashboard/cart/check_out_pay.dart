@@ -125,10 +125,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
       //     .price;
       // double totalPrice = widget.totalPrice;
       double totalPrice = 0.0;
+
       for (var cartItem in auth.userModel.cart!) {
-        var product = pro.products
-            .firstWhere((element) => element.docId == cartItem.productId);
-        totalPrice += double.parse(product.productPrice!);
+        totalPrice += cartItem.price!;
       }
       return Scaffold(
         appBar: AppBar(
@@ -524,7 +523,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                               FetchPixels.getPixelHeight(16)),
                                 ),
                                 Text(
-                                  "QR ${totalPrice! + 15 + selectedTip}",
+                                  "QR ${totalPrice + 15 + selectedTip}",
                                   style: R.textStyle
                                       .semiBoldMetropolis()
                                       .copyWith(

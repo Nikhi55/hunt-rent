@@ -93,60 +93,74 @@ class _CartViewState extends State<CartView> {
                             Text('Explore more and add some Items'),
                             getVerSpace(FetchPixels.getPixelHeight(10)),
                             MyButton(
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return DashboardView(
-                                        index: 1,
-                                      );
-                                    },
-                                  ));
-                                },
-                                buttonText: 'Start Shopping')
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return DashboardView(
+                                      index: 1,
+                                    );
+                                  },
+                                ));
+                              },
+                              buttonText: 'Start Shopping',
+                            )
                           ],
                         ),
                       )
                     : Expanded(
-                        child: ListView.builder(
-                          itemCount: cartProducts.length,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: FetchPixels.getPixelWidth(20)),
-                          itemBuilder: (context, index) {
-                            ProductModel model = cartProducts[index];
-                            return Column(
-                              children: [
-                                FeaturedWidget1(
-                                  model: model,
-                                  isCart: true,
-                                  index1: index,
-                                ),
-                                Divider(
-                                  height: 0,
-                                  color: R.colors.theme.withOpacity(0.4),
-                                  indent: 10,
-                                  endIndent: 10,
-                                ),
-                                getVerSpace(FetchPixels.getPixelHeight(10)),
-                                MyButton(
-                                  onTap: () {
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: cartProducts.length,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: FetchPixels.getPixelWidth(20)),
+                                itemBuilder: (context, index) {
+                                  ProductModel model = cartProducts[index];
+                                  return Column(
+                                    children: [
+                                      FeaturedWidget1(
+                                        model: model,
+                                        isCart: true,
+                                        index1: index,
+                                      ),
+                                      Divider(
+                                        height: 0,
+                                        color: R.colors.theme.withOpacity(0.4),
+                                        indent: 10,
+                                        endIndent: 10,
+                                      ),
+                                      getVerSpace(
+                                          FetchPixels.getPixelHeight(10)),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: FetchPixels.getPixelWidth(10),
+                                  vertical: FetchPixels.getPixelHeight(10)),
+                              child: MyButton(
+                                onTap: () {
+                                  if (cartProducts.isNotEmpty) {
                                     ProductModel model = cartProducts.first;
                                     Get.to(
                                       () => CheckOutPage(
                                         model: model,
                                       ),
                                     );
-                                  },
-                                  buttonText: "CHECKOUT",
-                                  borderRadius: 40,
-                                  height: FetchPixels.getPixelHeight(50),
-                                  textSize: 18,
-                                ),
-                              ],
-                            );
-                          },
+                                  }
+                                },
+                                buttonText: "CHECKOUT",
+                                borderRadius: 40,
+                                height: FetchPixels.getPixelHeight(50),
+                                textSize: 18,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                // getVerSpace(FetchPixels.getPixelHeight(120)),
               ],
             ),
           ),

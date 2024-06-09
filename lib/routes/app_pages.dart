@@ -39,7 +39,7 @@ abstract class AppPages {
     GetPage(name: Routes.performancePage, page: () => PerformancePage()),
     GetPage(name: Routes.forgotPassword, page: () => ForgotPassword()),
     GetPage(name: Routes.Bank_details, page: () => BankDetailsView()),
-    GetPage(name: Routes.paymentDetails, page: () => PaymentSuccessPage()),
+    // GetPage(name: Routes.paymentDetails, page: () => PaymentSuccessPage()),
     GetPage(name: Routes.LoginSignup, page: () => LoginSignup()),
   ];
 }

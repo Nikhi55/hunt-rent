@@ -5,12 +5,13 @@ class CartModel {
   String? customerName;
   String? customerId;
   String? productId;
-  String? productPrice;
+  double? productPrice;
   String? vendorId;
   Timestamp? startDate;
   Timestamp? endDate;
   String? orderStatus;
   String? submitStatus;
+  String? address;
 
   CartModel({
     this.docId,
@@ -23,6 +24,7 @@ class CartModel {
     this.endDate,
     this.orderStatus,
     this.submitStatus,
+    this.address,
   });
 
   CartModel.fromJson(Map<String, dynamic> json) {
@@ -30,12 +32,16 @@ class CartModel {
     customerName = json['customer_name'];
     customerId = json['customer_id'];
     productId = json['product_id'];
-    productPrice = json['product_price'];
+    productPrice = json['product_price'] != null &&
+            json['product_price'] is num // Check if product_price is numeric
+        ? (json['product_price'] as num).toDouble()
+        : null; // Parse productPrice as double
     vendorId = json['vendor_id'];
     startDate = json['start_date'];
     endDate = json['end_date'];
     orderStatus = json['order_status'];
     submitStatus = json['submit_status'];
+    address = json['delivery_address'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +56,7 @@ class CartModel {
     data['end_date'] = this.endDate;
     data['order_status'] = this.orderStatus;
     data['submit_status'] = this.submitStatus;
+    data['delivery_address'] = this.address;
     return data;
   }
 }

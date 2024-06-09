@@ -297,7 +297,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     totalRevenue = provider.earningsList
         .where((element) =>
             element.vendorId == FirebaseAuth.instance.currentUser!.email)
-        .map((e) => int.parse(e.productPrice!))
+        .map((e) => int.parse(e.productPrice! as String))
         .reduce((value, element) => value + element);
     print("totalRevenue $totalRevenue");
     setState(() {});

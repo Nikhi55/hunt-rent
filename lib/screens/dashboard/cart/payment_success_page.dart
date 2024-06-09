@@ -13,7 +13,11 @@ import '../home/provider/product_provider.dart';
 import '../home/heena_service/special_tailory_form.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
-  const PaymentSuccessPage({Key? key}) : super(key: key);
+  final double totalPrice;
+  final String orderId;
+  const PaymentSuccessPage(
+      {Key? key, required this.totalPrice, required this.orderId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +104,7 @@ class PaymentSuccessPage extends StatelessWidget {
                             style: R.textStyle.mediumMetropolis().copyWith(
                                 color: R.colors.blackColor.withOpacity(0.5),
                                 fontSize: FetchPixels.getPixelHeight(14))),
-                        Text("QR 700",
+                        Text("QR $totalPrice",
                             style: R.textStyle.semiBoldMetropolis().copyWith(
                                 color: R.colors.blackColor.withOpacity(0.5),
                                 fontSize: FetchPixels.getPixelHeight(14))),
@@ -142,7 +146,7 @@ class PaymentSuccessPage extends StatelessWidget {
                             style: R.textStyle.mediumMetropolis().copyWith(
                                 color: R.colors.blackColor.withOpacity(0.5),
                                 fontSize: FetchPixels.getPixelHeight(14))),
-                        Text("1574OISHD514",
+                        Text("$orderId",
                             style: R.textStyle.semiBoldMetropolis().copyWith(
                                 color: R.colors.blackColor.withOpacity(0.5),
                                 fontSize: FetchPixels.getPixelHeight(14))),
@@ -153,11 +157,12 @@ class PaymentSuccessPage extends StatelessWidget {
               ),
               // getVerSpace(FetchPixels.getPixelHeight(150)),
               MyButton(
-                  borderRadius: 50,
-                  onTap: () {
-                    Get.to(DashboardView());
-                  },
-                  buttonText: "Okay")
+                borderRadius: 50,
+                onTap: () {
+                  Get.to(DashboardView());
+                },
+                buttonText: "Okay",
+              )
             ],
           ),
         ),

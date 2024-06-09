@@ -18,8 +18,8 @@ class OrderHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ProductProvider,AuthProvider>(
-      builder: (context, product,auth, child) {
+    return Consumer2<ProductProvider, AuthProvider>(
+      builder: (context, product, auth, child) {
         return Scaffold(
           appBar: AppBar(
               leading: InkWell(
@@ -47,24 +47,7 @@ class OrderHistory extends StatelessWidget {
               )),
           body: getPaddingWidget(
             EdgeInsets.symmetric(horizontal: FetchPixels.getPixelWidth(20)),
-            Column(children: [
-              getVerSpace(FetchPixels.getPixelHeight(10)),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: product.myOwnProducts.length,
-                  itemBuilder: (context, index) {
-                    ProductModel model = product.myOwnProducts[index];
-                    return
-                      // product.myList.contains(model.docId)?
-                      MyOrderHistory(
-                      model: model,
-                        index: index,
-                    );
-                    // :SizedBox();
-                  },
-                ),
-              )
-            ]),
+            MyOrderHistory(),
           ),
         );
       },

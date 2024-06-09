@@ -476,7 +476,10 @@ class _CheckOutPageState1 extends State<CheckOutPage1> {
                         print('currentPay is not 0');
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => PaymentSuccessPage(),
+                            builder: (context) => PaymentSuccessPage(
+                              totalPrice: 700,
+                              orderId: '',
+                            ),
                           ),
                         );
                       }

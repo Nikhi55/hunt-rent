@@ -5,12 +5,17 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hunt_and_rent/dialog/on_tap_dialog.dart';
+import 'package:hunt_and_rent/routes/app_routes.dart';
 import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/cart/cardDetails.dart';
+import 'package:hunt_and_rent/screens/dashboard/cart/model/cart_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/cart/payment_config.dart';
+import 'package:hunt_and_rent/screens/dashboard/cart/payment_success_page.dart';
+import 'package:hunt_and_rent/screens/dashboard/home/model/category_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
-import 'package:pay/pay.dart';
+// import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 import '../../../base/resizer/fetch_pixels.dart';
@@ -58,52 +63,52 @@ class _CheckOutPageState extends State<CheckOutPage> {
   // }
 
   String os = Platform.operatingSystem;
-  var applePayButton = ApplePayButton(
-    paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
-    paymentItems: const [
-      PaymentItem(
-        label: 'Item A',
-        amount: '0.01',
-        status: PaymentItemStatus.final_price,
-      ),
-      PaymentItem(
-        label: 'Item B',
-        amount: '0.01',
-        status: PaymentItemStatus.final_price,
-      ),
-      PaymentItem(
-        label: 'Total',
-        amount: '0.02',
-        status: PaymentItemStatus.final_price,
-      )
-    ],
-    style: ApplePayButtonStyle.black,
-    width: double.infinity,
-    height: 50,
-    type: ApplePayButtonType.buy,
-    margin: const EdgeInsets.only(top: 15.0),
-    onPaymentResult: (result) => debugPrint('Payment Result $result'),
-    loadingIndicator: const Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
+  // var applePayButton = ApplePayButton(
+  //   paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
+  //   paymentItems: const [
+  //     PaymentItem(
+  //       label: 'Item A',
+  //       amount: '0.01',
+  //       status: PaymentItemStatus.final_price,
+  //     ),
+  //     PaymentItem(
+  //       label: 'Item B',
+  //       amount: '0.01',
+  //       status: PaymentItemStatus.final_price,
+  //     ),
+  //     PaymentItem(
+  //       label: 'Total',
+  //       amount: '0.02',
+  //       status: PaymentItemStatus.final_price,
+  //     )
+  //   ],
+  //   style: ApplePayButtonStyle.black,
+  //   width: double.infinity,
+  //   height: 50,
+  //   type: ApplePayButtonType.buy,
+  //   margin: const EdgeInsets.only(top: 15.0),
+  //   onPaymentResult: (result) => debugPrint('Payment Result $result'),
+  //   loadingIndicator: const Center(
+  //     child: CircularProgressIndicator(),
+  //   ),
+  // );
 
-  var googlePayButton = GooglePayButton(
-    paymentConfiguration: PaymentConfiguration.fromJsonString(defaultGooglePay),
-    paymentItems: const [
-      PaymentItem(
-        label: 'Total',
-        amount: '0.01',
-        status: PaymentItemStatus.final_price,
-      )
-    ],
-    type: GooglePayButtonType.pay,
-    margin: const EdgeInsets.only(top: 15.0),
-    onPaymentResult: (result) => debugPrint('Payment Result $result'),
-    loadingIndicator: const Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
+  // var googlePayButton = GooglePayButton(
+  //   paymentConfiguration: PaymentConfiguration.fromJsonString(defaultGooglePay),
+  //   paymentItems: const [
+  //     PaymentItem(
+  //       label: 'Total',
+  //       amount: '0.01',
+  //       status: PaymentItemStatus.final_price,
+  //     )
+  //   ],
+  //   type: GooglePayButtonType.pay,
+  //   margin: const EdgeInsets.only(top: 15.0),
+  //   onPaymentResult: (result) => debugPrint('Payment Result $result'),
+  //   loadingIndicator: const Center(
+  //     child: CircularProgressIndicator(),
+  //   ),
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -365,7 +370,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               _buildTipContainer(5.0),
                               _buildTipContainer(10.0),
                               _buildTipContainer(15.0),
-                              _buildTipContainer(15.0),
+                              _buildTipContainer(20.0),
                             ],
                           ),
                         ),
@@ -563,103 +568,92 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   ),
                   getVerSpace(FetchPixels.getPixelHeight(20)),
                   MyButton(
-                    // onTap: () {
-                    //   if (currentPay == 0) {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) {
-                    //           return FatoraPay(
-                    //             currencyCode: 'QAR',
-                    //             // Pass your desired values here
-                    //             amount: total + 15,
-                    //             customerEmail: '${auth.userModel.email}',
-                    //             customerName: '${auth.userModel.userName}',
-                    //             customerPhone: '1234567890',
-                    //             customerCountry: 'LK',
-                    //             lang: 'en',
-                    //             note: 'This is a test note',
-                    //           );
-                    //         },
-                    //       ),
-                    //     );
-                    //   } else {
-                    //     Get.dialog(
-                    //       OnTapFunctionDialog(
-                    //         onTap: () async {
-                    //           for (int i = 0;
-                    //               i < auth.userModel.cart!.length;
-                    //               i++) {
-                    //             CartModel cartModel = CartModel(
-                    //               productId: auth.userModel.cart![i].productId,
-                    //               docId: "",
-                    //               productPrice: pro.products
-                    //                   .where((element) =>
-                    //                       element.docId == auth.cartDocList[i])
-                    //                   .first
-                    //                   .productPrice,
-                    //               customerId: auth.userModel.email,
-                    //               customerName: auth.userModel.userName,
-                    //               vendorId: pro.products
-                    //                   .where((element) =>
-                    //                       element.docId == auth.cartDocList[i])
-                    //                   .first
-                    //                   .email,
-                    //               startDate: auth.userModel.cart![i].startDate!,
-                    //               endDate: auth.userModel.cart![i].endDate!,
-                    //               orderStatus: OrderStatus.Active.name,
-                    //               submitStatus: "",
-                    //             );
-                    //             await FirebaseFirestore.instance
-                    //                 .collection("placeOrder")
-                    //                 .add(cartModel.toJson())
-                    //                 .then((value) async {
-                    //               await FirebaseFirestore.instance
-                    //                   .collection("placeOrder")
-                    //                   .doc(value.id)
-                    //                   .update({"doc_id": value.id});
-                    //             });
-                    //             if (pro.products
-                    //                     .where((element) => auth.cartDocList
-                    //                         .contains(element.docId))
-                    //                     .toList()[i]
-                    //                     .productType ==
-                    //                 ProductsTypes.sell.name) {
-                    //               await FirebaseFirestore.instance
-                    //                   .collection("products")
-                    //                   .doc(auth.userModel.cart![i].productId)
-                    //                   .update({
-                    //                 "product_type": ProductsTypes.sold.name
-                    //               });
-                    //             } else {
-                    //               await FirebaseFirestore.instance
-                    //                   .collection("products")
-                    //                   .doc(auth.userModel.cart![i].productId)
-                    //                   .update({
-                    //                 "product_type": ProductsTypes.rented.name
-                    //               });
-                    //             }
-                    //           }
-                    //           auth.userModel.cart!.clear();
-                    //           auth.updateUser(auth.userModel);
-                    //           pro.getEarningRecord();
-                    //           Get.toNamed(Routes.paymentDetails);
-                    //         },
-                    //         text: "Are You Sure You Want to Place Your Order?",
-                    //         headingText: "Order Place!",
-                    //       ),
-                    //     );
-                    //   }
-                    // },
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CheckoutScreen(),
+                      Get.dialog(
+                        OnTapFunctionDialog(
+                          onTap: () async {
+                            double finalTotalPrice =
+                                totalPrice + 15 + selectedTip;
+                            String address = pro
+                                .locationAddress; // Assuming pro.locationAddress contains the address
+                            String orderId =
+                                ''; // Variable to store the generated order ID
+
+                            for (int i = 0;
+                                i < auth.userModel.cart!.length;
+                                i++) {
+                              CartModel cartModel = CartModel(
+                                productId: auth.userModel.cart![i].productId,
+                                docId: "",
+                                productPrice:
+                                    finalTotalPrice, // Pass the total price
+                                address: address, // Pass the address
+                                customerId: auth.userModel.email,
+                                customerName: auth.userModel.userName,
+                                vendorId: pro.products
+                                    .where((element) =>
+                                        element.docId == auth.cartDocList[i])
+                                    .first
+                                    .email,
+                                startDate: auth.userModel.cart![i].startDate!,
+                                endDate: auth.userModel.cart![i].endDate!,
+                                orderStatus: OrderStatus.Active.name,
+                                submitStatus: "",
+                              );
+                              await FirebaseFirestore.instance
+                                  .collection("placeOrder")
+                                  .add(cartModel.toJson())
+                                  .then((value) async {
+                                await FirebaseFirestore.instance
+                                    .collection("placeOrder")
+                                    .doc(value.id)
+                                    .update({"doc_id": value.id});
+                                orderId =
+                                    value.id; // Store the generated order ID
+                              });
+                              if (pro.products
+                                      .where((element) => auth.cartDocList
+                                          .contains(element.docId))
+                                      .toList()[i]
+                                      .productType ==
+                                  ProductsTypes.sell.name) {
+                                await FirebaseFirestore.instance
+                                    .collection("products")
+                                    .doc(auth.userModel.cart![i].productId)
+                                    .update({
+                                  "product_type": ProductsTypes.sold.name
+                                });
+                              } else {
+                                await FirebaseFirestore.instance
+                                    .collection("products")
+                                    .doc(auth.userModel.cart![i].productId)
+                                    .update({
+                                  "product_type": ProductsTypes.rented.name
+                                });
+                              }
+                            }
+                            auth.userModel.cart!.clear();
+                            auth.updateUser(auth.userModel);
+                            pro.getEarningRecord();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PaymentSuccessPage(
+                                  totalPrice:
+                                      finalTotalPrice, // Pass the total price
+                                  orderId:
+                                      orderId, // Pass the generated order ID
+                                ),
+                              ),
+                            );
+                          },
+                          text: "Are You Sure You Want to Place Your Order?",
+                          headingText: "Order Place!",
                         ),
                       );
                     },
-                    buttonText: "Place Your Order",
+                    buttonText: 'Place your Order',
                   ),
+
                   getVerSpace(
                     FetchPixels.getPixelHeight(30),
                   ),

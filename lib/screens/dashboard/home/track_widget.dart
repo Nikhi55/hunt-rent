@@ -29,75 +29,75 @@ class TrackOrder extends StatefulWidget {
 class _TrackOrderState extends State<TrackOrder> {
   //
 
-  // List<StepperData> stepperData = [
-  //   StepperData(
-  //     title: StepperText("Order Placed",
-  //         textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
-  //     subtitle: StepperText("Your order has been placed",
-  //         textStyle: R.textStyle
-  //             .regularMetropolis()
-  //             .copyWith(fontSize: 12, color: R.colors.fillColor)),
-  //     // iconWidget: Container(
-  //     //   padding: const EdgeInsets.all(8),
-  //     //   decoration: const BoxDecoration(
-  //     //       color: Color(0xFF460D54),
-  //     //       borderRadius: BorderRadius.all(Radius.circular(30))),
-  //     //   child: const Icon(Icons.check, color: Colors.white),
-  //     // ),
-  //   ),
-  //   StepperData(
-  //       title: StepperText("Preparing",
-  //           textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
-  //       subtitle: StepperText("Your order is being prepared",
-  //           textStyle: R.textStyle
-  //               .regularMetropolis()
-  //               .copyWith(fontSize: 12, color: R.colors.fillColor)),
-  //       iconWidget: Icon(Icons.check)
-  //       // iconWidget: status >= 2
-  //       //     ? Container(
-  //       //         padding: const EdgeInsets.all(8),
-  //       //         decoration: const BoxDecoration(
-  //       //             color: Color(0xFF460D54),
-  //       //             borderRadius: BorderRadius.all(Radius.circular(30))),
-  //       //         child: const Icon(Icons.check, color: Colors.white),
-  //       //       )
-  //       //     : null,
-  //       ),
-  //   StepperData(
-  //     title: StepperText("Out for Delivery",
-  //         textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
-  //     subtitle: StepperText(
-  //       "Our delivery executive is on the way to deliver your item",
-  //       textStyle: R.textStyle
-  //           .regularMetropolis()
-  //           .copyWith(fontSize: 12, color: R.colors.fillColor),
-  //     ),
-  //     iconWidget: Container(
-  //       padding: const EdgeInsets.all(8),
-  //       decoration: const BoxDecoration(
-  //           color: Color(0xFF460D54),
-  //           borderRadius: BorderRadius.all(Radius.circular(30))),
-  //       child: const Icon(Icons.check, color: Colors.white),
-  //     ),
-  //   ),
-  //   StepperData(
-  //     title: StepperText("Delivered",
-  //         textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
-  //     subtitle: StepperText(
-  //       "Order Delivered",
-  //       textStyle: R.textStyle
-  //           .regularMetropolis()
-  //           .copyWith(fontSize: 12, color: R.colors.fillColor),
-  //     ),
-  //     // iconWidget: Container(
-  //     //   padding: const EdgeInsets.all(8),
-  //     //   decoration: const BoxDecoration(
-  //     //       color: Color(0xFF460D54),
-  //     //       borderRadius: BorderRadius.all(Radius.circular(30))),
-  //     //   child: const Icon(Icons.check, color: Colors.white),
-  //     // ),
-  //   ),
-  // ];
+  List<StepperData> stepperData = [
+    StepperData(
+      title: StepperText("Order Placed",
+          textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
+      subtitle: StepperText("Your order has been placed",
+          textStyle: R.textStyle
+              .regularMetropolis()
+              .copyWith(fontSize: 12, color: R.colors.fillColor)),
+      // iconWidget: Container(
+      //   padding: const EdgeInsets.all(8),
+      //   decoration: const BoxDecoration(
+      //       color: Color(0xFF460D54),
+      //       borderRadius: BorderRadius.all(Radius.circular(30))),
+      //   child: const Icon(Icons.check, color: Colors.white),
+      // ),
+    ),
+    StepperData(
+        title: StepperText("Preparing",
+            textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
+        subtitle: StepperText("Your order is being prepared",
+            textStyle: R.textStyle
+                .regularMetropolis()
+                .copyWith(fontSize: 12, color: R.colors.fillColor)),
+        iconWidget: Icon(Icons.check)
+        // iconWidget: status >= 2
+        //     ? Container(
+        //         padding: const EdgeInsets.all(8),
+        //         decoration: const BoxDecoration(
+        //             color: Color(0xFF460D54),
+        //             borderRadius: BorderRadius.all(Radius.circular(30))),
+        //         child: const Icon(Icons.check, color: Colors.white),
+        //       )
+        //     : null,
+        ),
+    StepperData(
+      title: StepperText("Out for Delivery",
+          textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
+      subtitle: StepperText(
+        "Our delivery executive is on the way to deliver your item",
+        textStyle: R.textStyle
+            .regularMetropolis()
+            .copyWith(fontSize: 12, color: R.colors.fillColor),
+      ),
+      iconWidget: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: const BoxDecoration(
+            color: Color(0xFF460D54),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: const Icon(Icons.check, color: Colors.white),
+      ),
+    ),
+    StepperData(
+      title: StepperText("Delivered",
+          textStyle: R.textStyle.mediumMetropolis().copyWith(fontSize: 14)),
+      subtitle: StepperText(
+        "Order Delivered",
+        textStyle: R.textStyle
+            .regularMetropolis()
+            .copyWith(fontSize: 12, color: R.colors.fillColor),
+      ),
+      // iconWidget: Container(
+      //   padding: const EdgeInsets.all(8),
+      //   decoration: const BoxDecoration(
+      //       color: Color(0xFF460D54),
+      //       borderRadius: BorderRadius.all(Radius.circular(30))),
+      //   child: const Icon(Icons.check, color: Colors.white),
+      // ),
+    ),
+  ];
 
   var total = 0;
   static var status = 2;
@@ -105,19 +105,14 @@ class _TrackOrderState extends State<TrackOrder> {
   addTotalValue() {
     var pro = Provider.of<ProductProvider>(context, listen: false);
     var auth = Provider.of<AuthProvider>(context, listen: false);
-    for (var i = 0;
-        i <
-            pro.products
-                .where((element) => auth.cartDocList.contains(element.docId))
-                .length;
-        i++) {
-      total = total +
-          int.parse(pro.products
-              .where((element) => auth.cartDocList.contains(element.docId))
-              .toList()[i]
-              .productPrice!);
-      print("total $total");
+    total = 0; // Reset total to 0 before calculating
+    for (var i = 0; i < pro.products.length; i++) {
+      // Check if the cartDocList contains the current product
+      if (auth.cartDocList.contains(pro.products[i].docId)) {
+        total += int.parse(pro.products[i].productPrice ?? '0');
+      }
     }
+    print("total $total");
   }
 
   @override

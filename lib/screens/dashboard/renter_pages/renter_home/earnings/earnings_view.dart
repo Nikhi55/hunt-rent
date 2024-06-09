@@ -28,7 +28,7 @@ class EarningsView extends StatelessWidget {
         .forEach((model) {
       String? productId = model.productId;
       print(model.productPrice);
-      double salesData = double.tryParse(model.productPrice ?? '0.0') ?? 0.0;
+      double salesData = double.tryParse(model.productPrice as String) ?? 0.0;
 
       // Ensure that salesDataMap[productId] is not null
       if (salesDataMap[productId] == null) {

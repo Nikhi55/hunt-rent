@@ -174,6 +174,11 @@ class _HeenaCalendarScreenState extends State<HeenaCalendarScreen> {
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(builder: (context, auth, _) {
       return TableCalendar<Event>(
+        headerStyle: HeaderStyle(
+          titleCentered: true,
+          formatButtonVisible: false,
+        ),
+        // daysOfWeekVisible: false,
         firstDay: kFirstDay,
         lastDay: kLastDay,
         focusedDay: _focusedDay,

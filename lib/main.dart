@@ -5,6 +5,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hunt_and_rent/routes/app_pages.dart';
 import 'package:hunt_and_rent/routes/app_routes.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
+import 'package:hunt_and_rent/screens/auth/provider/selecteddate.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => SelectedDatesProvider()),
       ],
       child: const MyApp(),
     ),

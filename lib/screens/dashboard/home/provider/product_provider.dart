@@ -20,6 +20,11 @@ class ProductProvider extends ChangeNotifier {
     });
   }
 
+  void updateLocationAddress(String newAddress) {
+    locationAddress = newAddress;
+    notifyListeners();
+  }
+
   update() {
     _notifyListeners();
   }
@@ -80,21 +85,24 @@ class ProductProvider extends ChangeNotifier {
       double longitude = double.tryParse(lng) ?? 0.0;
       var placemarks = await placemarkFromCoordinates(latitude, longitude);
       locationAddress =
-          "${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
+          "${placemarks.first.subLocality ?? ''}, ${placemarks.first.locality ?? ''}, ${placemarks.first.administrativeArea ?? ''}, ${placemarks.first.country ?? ''}";
+
+      // Update markers
       markers = {
         Marker(
           markerId: MarkerId('marker_1'),
           position: LatLng(latitude, longitude),
-          infoWindow: InfoWindow(title: "$locationAddress"),
+          infoWindow: InfoWindow(title: "Current Location"),
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
         ),
       };
-      print("locationAddress $locationAddress");
+
+      print("locationAddress: $locationAddress");
     } catch (e) {
       print("Error fetching location address: $e");
     } finally {
-      _notifyListeners();
+      notifyListeners(); // Ensure listeners are notified after updating state
     }
   }
 

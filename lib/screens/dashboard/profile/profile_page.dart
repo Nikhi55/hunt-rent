@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hunt_and_rent/base/resizer/fetch_pixels.dart';
 import 'package:hunt_and_rent/base/widget_utils.dart';
+import 'package:hunt_and_rent/screens/auth/login_signup.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
 import 'package:hunt_and_rent/screens/dashboard/profile/pages/edit_profile_view.dart';
+import 'package:hunt_and_rent/widgets/my_button.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -368,7 +370,7 @@ class _ProfileViewState extends State<ProfileView> {
     R.images.orderHistory,
     R.images.notifications,
     R.images.fav1,
-    R.images.performance,
+    R.images.becomearenter,
     R.images.performance,
     R.images.support,
     R.images.rate,
@@ -386,7 +388,7 @@ class _ProfileViewState extends State<ProfileView> {
     "My Order History",
     "Notifications",
     "My Wishlist",
-    "My Performance",
+    "Become a Renter",
     "My Performance",
     "Support",
     "Rate",
@@ -448,22 +450,30 @@ class _ProfileViewState extends State<ProfileView> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("You are not logged in."),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Get.toNamed(Routes.LoginSignup); // Replace with your login route
-            },
-            child: Text("Login"),
+          getAssetImage(
+            R.images.loginsignup,
+            height: FetchPixels.getPixelHeight(130),
+            width: FetchPixels.getPixelWidth(100),
           ),
-          // SizedBox(height: 10),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     Get.toNamed(Routes.signUpView); // Replace with your sign-up route
-          //   },
-          //   child: Text("Sign Up"),
+          getVerSpace(FetchPixels.getPixelHeight(05)),
+          // Text(
+          //   'No Notifications',
+          //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
           // ),
+          Text('Login and start shopping now!'),
+          getVerSpace(FetchPixels.getPixelHeight(10)),
+          MyButton(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return LoginSignup();
+                },
+              ));
+            },
+            buttonText: 'Login/Sign Up',
+          )
         ],
       ),
     );

@@ -9,6 +9,7 @@ import 'package:hunt_and_rent/dialog/on_tap_dialog.dart';
 import 'package:hunt_and_rent/routes/app_routes.dart';
 import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
+import 'package:hunt_and_rent/screens/auth/provider/selecteddate.dart';
 import 'package:hunt_and_rent/screens/dashboard/cart/cardDetails.dart';
 import 'package:hunt_and_rent/screens/dashboard/cart/model/cart_model.dart';
 import 'package:hunt_and_rent/screens/dashboard/cart/payment_config.dart';
@@ -62,7 +63,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
   //   pro.setTotalPrice(initialPrice);
   // }
 
-  String os = Platform.operatingSystem;
+  // String os = Platform.operatingSystem;
   // var applePayButton = ApplePayButton(
   //   paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
   //   paymentItems: const [
@@ -218,45 +219,86 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       getVerSpace(FetchPixels.getPixelHeight(10)),
                       ListTile(
                         contentPadding: EdgeInsets.zero,
-                        leading: getAssetImage(R.images.locationIcon,
-                            scale: FetchPixels.getPixelHeight(3)),
+                        leading: getAssetImage(
+                          R.images.locationIcon,
+                          scale: FetchPixels.getPixelHeight(3),
+                        ),
                         title: Text(
                           "My Home Address",
                           style: R.textStyle.mediumMetropolis().copyWith(
-                              fontSize: FetchPixels.getPixelHeight(16)),
+                                fontSize: FetchPixels.getPixelHeight(16),
+                              ),
                         ),
-                        subtitle: Text(
-                          "${pro.locationAddress}",
-                          style: R.textStyle.regularMetropolis().copyWith(
-                              fontSize: FetchPixels.getPixelHeight(12)),
+                        subtitle: pro.locationAddress != null
+                            ? Text(
+                                "${pro.locationAddress}",
+                                style: R.textStyle.regularMetropolis().copyWith(
+                                      fontSize: FetchPixels.getPixelHeight(12),
+                                    ),
+                              )
+                            : Text(
+                                "Failed to load location",
+                                style: R.textStyle.regularMetropolis().copyWith(
+                                      fontSize: FetchPixels.getPixelHeight(12),
+                                      color:
+                                          Colors.red, // Adjust color as needed
+                                    ),
+                              ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                String editedAddress =
+                                    pro.locationAddress ?? "";
+
+                                return AlertDialog(
+                                  title: Text("Enter Your Address"),
+                                  content: TextFormField(
+                                    maxLines: 4,
+                                    initialValue: editedAddress,
+                                    autovalidateMode: AutovalidateMode.always,
+                                    validator: (value) {
+                                      // Implement validation logic if needed
+                                      return null; // Return null if validation passes
+                                    },
+                                    onChanged: (value) {
+                                      editedAddress = value;
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: "Enter your address",
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text("Cancel"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      child: Text("Save"),
+                                      onPressed: () {
+                                        // Update the location address in the provider
+                                        pro.updateLocationAddress(
+                                            editedAddress);
+
+                                        // Close the dialog
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                         ),
                       ),
-                      // ListTile(
-                      //   contentPadding: EdgeInsets.zero,
-                      //   leading: getAssetImage(R.images.locationIcon,
-                      //       scale: FetchPixels.getPixelHeight(3)),
-                      //   title: TextFormField(
-                      //     autovalidateMode: AutovalidateMode.always,
-                      //     validator: (value) {},
-                      //     scribbleEnabled: true,
-                      //     textAlign: TextAlign.start,
-                      //     decoration: InputDecoration(
-                      //       contentPadding:
-                      //           EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                      //       label: Padding(
-                      //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      //         child: Text(
-                      //           'Enter Your Adress',
-                      //           style: R.textStyle.regularMetropolis().copyWith(
-                      //               fontSize: FetchPixels.getPixelHeight(14)),
-                      //         ),
-                      //       ),
-                      //       border: OutlineInputBorder(
-                      //           borderRadius: BorderRadius.circular(25)),
-                      //       isCollapsed: true,
-                      //     ),
-                      //   ),
-                      // ),
                       Container(
                         height: FetchPixels.getPixelHeight(250),
                         child: ClipRRect(
@@ -267,7 +309,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               double lng = double.tryParse(pro.lng) ?? 0.0;
                               return GoogleMap(
                                 initialCameraPosition: CameraPosition(
-                                    target: LatLng(lat, lng), zoom: 11),
+                                  target: LatLng(lat, lng),
+                                  zoom: 11,
+                                ),
                                 mapType: MapType.normal,
                                 scrollGesturesEnabled: true,
                                 zoomControlsEnabled: true,
@@ -282,18 +326,23 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     Marker(
                                       markerId: MarkerId('marker_1'),
                                       position: LatLng(
-                                          latLng.latitude, latLng.longitude),
+                                        latLng.latitude,
+                                        latLng.longitude,
+                                      ),
                                       infoWindow: InfoWindow(
-                                          title: "${pro.locationAddress}"),
+                                        title: "Current Location",
+                                        snippet: pro.locationAddress ?? "",
+                                      ),
                                       icon:
                                           BitmapDescriptor.defaultMarkerWithHue(
-                                              BitmapDescriptor.hueViolet),
+                                        BitmapDescriptor.hueViolet,
+                                      ),
                                     ),
                                   );
                                   pro.fetchLocationAddress();
-                                  // pro.notifyListeners();
                                 },
                                 onMapCreated: (GoogleMapController controller) {
+                                  // Optional: If you need to access the map controller
                                   // _controller.complete(controller);
                                 },
                                 markers: Set<Marker>.of(pro.markers),
@@ -301,7 +350,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             },
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -528,7 +577,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                               FetchPixels.getPixelHeight(16)),
                                 ),
                                 Text(
-                                  "QR ${totalPrice + 15 + selectedTip}",
+                                  "QR ${totalPrice + 15 + selectedTip.toInt()}",
                                   style: R.textStyle
                                       .semiBoldMetropolis()
                                       .copyWith(
@@ -579,6 +628,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             String orderId =
                                 ''; // Variable to store the generated order ID
 
+                            final selectedDatesProvider =
+                                Provider.of<SelectedDatesProvider>(context,
+                                    listen: false);
+                            final selectedDates =
+                                selectedDatesProvider.selectedDates;
                             for (int i = 0;
                                 i < auth.userModel.cart!.length;
                                 i++) {
@@ -595,8 +649,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                         element.docId == auth.cartDocList[i])
                                     .first
                                     .email,
-                                startDate: auth.userModel.cart![i].startDate!,
-                                endDate: auth.userModel.cart![i].endDate!,
+                                startDate: selectedDates
+                                    .first, // Use the first selected date
+                                endDate: selectedDates
+                                    .last, // Use the last selected date
                                 orderStatus: OrderStatus.Active.name,
                                 submitStatus: "",
                               );

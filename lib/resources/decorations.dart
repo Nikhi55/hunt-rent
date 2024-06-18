@@ -18,18 +18,18 @@ class AppDecorations {
         isDense: true,
         // floatingLabelBehavior: FloatingLabelBehavior.never,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(
             width: 1,
             color: R.colors.theme,
           ),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(width: 2, color: R.colors.fillColor),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(width: 2, color: R.colors.fillColor),
         ),
         border: OutlineInputBorder(
@@ -37,7 +37,7 @@ class AppDecorations {
             width: 2,
             color: R.colors.fillColor,
           ),
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
         ),
         filled: true,
         fillColor: R.colors.transparent,
@@ -63,25 +63,25 @@ class AppDecorations {
         isDense: true,
         floatingLabelBehavior: FloatingLabelBehavior.never,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(
             width: 0.5,
             color: R.colors.theme,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(
             width: 0.5,
             color: R.colors.theme,
           ),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(width: 0.5, color: R.colors.fillColor),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(25)),
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(10)),
           borderSide: BorderSide(color: R.colors.whiteColor.withOpacity(0.2)),
         ),
         focusColor: R.colors.theme,

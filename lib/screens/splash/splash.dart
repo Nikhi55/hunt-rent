@@ -72,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     FetchPixels(context);
     return Scaffold(
-        backgroundColor: R.colors.theme1,
+        backgroundColor: R.colors.theme,
         body:
             // getVerSpace(FetchPixels.getPixelHeight(10)),
             // getVerSpace(FetchPixels.getPixelHeight(10)),

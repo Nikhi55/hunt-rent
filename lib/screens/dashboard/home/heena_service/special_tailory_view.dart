@@ -368,7 +368,7 @@ class _SpecialTailoryViewState extends State<SpecialTailoryView> {
                           padding: EdgeInsets.zero,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: R.colors.bgColor,
+                            color: R.colors.whiteColor,
                           ),
                           child: Column(
                             children: [
@@ -423,7 +423,7 @@ class _SpecialTailoryViewState extends State<SpecialTailoryView> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: R.colors.bgColor,
+                            color: R.colors.whiteColor,
                           ),
                           child: HeenaCalendarScreen(
                             onDateSelected: (date) {
@@ -437,7 +437,7 @@ class _SpecialTailoryViewState extends State<SpecialTailoryView> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: R.colors.bgColor,
+                            color: R.colors.whiteColor,
                           ),
                           child: Column(
                             children: [

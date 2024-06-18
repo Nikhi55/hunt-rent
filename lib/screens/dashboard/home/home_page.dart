@@ -90,9 +90,11 @@ class _HomeViewState extends State<HomeView> {
                   onTap: () {
                     Get.to(() => WishList());
                   },
-                  child: getAssetImage(R.images.favOutline,
-                      // color: R.colors.buttonText,
-                      scale: 4.5),
+                  child: getAssetImage(
+                    R.images.favOutline,
+                    // color: R.colors.buttonText,
+                    scale: 4.5,
+                  ),
                 ),
                 getHorSpace(FetchPixels.getPixelWidth(10)),
                 InkWell(
@@ -397,20 +399,23 @@ class _HomeViewState extends State<HomeView> {
                           height: FetchPixels.getPixelHeight(35),
                           child: Row(
                             children: [
-                              InkWell(
-                                  onTap: () {
-                                    auth.isClicked = !auth.isClicked;
-                                    if (product.isSubClicked == true) {
-                                      print(
-                                          "sub clicked ${product.isSubClicked}");
-                                      product.isSubClicked = false;
+                              // InkWell(
+                              //   onTap: () {
+                              //     auth.isClicked = !auth.isClicked;
+                              //     if (product.isSubClicked == true) {
+                              //       print(
+                              //           "sub clicked ${product.isSubClicked}");
+                              //       product.isSubClicked = false;
 
-                                      product.update();
-                                    }
-                                    auth.update();
-                                  },
-                                  child: getAssetImage(R.images.lines,
-                                      scale: FetchPixels.getPixelHeight(4))),
+                              //       product.update();
+                              //     }
+                              //     auth.update();
+                              //   },
+                              //   child: getAssetImage(
+                              //     R.images.lines,
+                              //     scale: FetchPixels.getPixelHeight(4),
+                              //   ),
+                              // ),
                               getHorSpace(FetchPixels.getPixelWidth(10)),
                               Expanded(
                                 child: ListView.builder(
@@ -418,7 +423,11 @@ class _HomeViewState extends State<HomeView> {
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
                                     return categoryHeadings(
-                                        context, index, auth, product);
+                                      context,
+                                      index,
+                                      auth,
+                                      product,
+                                    );
                                   },
                                 ),
                               )
@@ -427,7 +436,8 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         getPaddingWidget(
                           EdgeInsets.symmetric(
-                              horizontal: FetchPixels.getPixelWidth(20)),
+                            horizontal: FetchPixels.getPixelWidth(20),
+                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -481,7 +491,8 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         getPaddingWidget(
                           EdgeInsets.symmetric(
-                              horizontal: FetchPixels.getPixelWidth(20)),
+                            horizontal: FetchPixels.getPixelWidth(20),
+                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -499,16 +510,18 @@ class _HomeViewState extends State<HomeView> {
 
                         getPaddingWidget(
                           EdgeInsets.symmetric(
-                              horizontal: FetchPixels.getPixelWidth(20)),
+                            horizontal: FetchPixels.getPixelWidth(20),
+                          ),
                           Container(
                             height: FetchPixels.getPixelHeight(230),
                             child: GridView(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisSpacing: 10,
-                                      // mainAxisSpacing: 5,
-                                      childAspectRatio: 9 / 12,
-                                      crossAxisCount: 4),
+                                crossAxisSpacing: 10,
+                                // mainAxisSpacing: 5,
+                                childAspectRatio: 9 / 12,
+                                crossAxisCount: 4,
+                              ),
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               // scrollDirection: Axis.vertical,
@@ -560,9 +573,11 @@ class _HomeViewState extends State<HomeView> {
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: R.colors.containerBG1,
-                                      borderRadius: BorderRadius.circular(
-                                          FetchPixels.getPixelHeight(20))),
+                                    color: R.colors.containerBG1,
+                                    borderRadius: BorderRadius.circular(
+                                      FetchPixels.getPixelHeight(20),
+                                    ),
+                                  ),
                                   margin: EdgeInsets.symmetric(
                                       horizontal: FetchPixels.getPixelWidth(5)),
                                   padding: EdgeInsets.symmetric(
@@ -575,10 +590,10 @@ class _HomeViewState extends State<HomeView> {
                                       style: R.textStyle
                                           .regularMetropolis()
                                           .copyWith(
-                                              fontSize:
-                                                  FetchPixels.getPixelHeight(
-                                                      14),
-                                              color: R.colors.blackColor),
+                                            fontSize:
+                                                FetchPixels.getPixelHeight(14),
+                                            color: R.colors.blackColor,
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -635,7 +650,8 @@ class _HomeViewState extends State<HomeView> {
                                               onPressed: () {
                                                 // Define your onPressed action here
                                                 Get.to(
-                                                    () => SpecialTailoryView());
+                                                  () => SpecialTailoryView(),
+                                                );
                                               },
                                               child: Text(
                                                 'Book an Artist',
@@ -748,8 +764,9 @@ class _HomeViewState extends State<HomeView> {
                             // margin: EdgeInsets.symmetric(horizontal: 15),
                             clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
-                                border: Border.all(color: R.colors.whiteColor),
-                                borderRadius: BorderRadius.circular(25)),
+                              border: Border.all(color: R.colors.whiteColor),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
                             child: VideoPlayerView(),
                           ),
                         ),
@@ -794,14 +811,16 @@ class _HomeViewState extends State<HomeView> {
                                                         20))),
                                     getVerSpace(FetchPixels.getPixelHeight(15)),
                                     Text(
-                                        "Blue Salon is Qatar’s leading luxury brand store. The nation’s first and foremost go-to luxury department store, representing hundreds of retail brands in Qatar’s market. Established in 1981, Blue Salon has become a national leader in high-end fashion, watches, jewelry, perfumes, cosmetics, home decoration, luggage, and more.",
-                                        textAlign: TextAlign.start,
-                                        style: R.textStyle
-                                            .regularMetropolis()
-                                            .copyWith(
-                                                fontSize:
-                                                    FetchPixels.getPixelHeight(
-                                                        13.5))),
+                                      "Blue Salon is Qatar’s leading luxury brand store. The nation’s first and foremost go-to luxury department store, representing hundreds of retail brands in Qatar’s market. Established in 1981, Blue Salon has become a national leader in high-end fashion, watches, jewelry, perfumes, cosmetics, home decoration, luggage, and more.",
+                                      textAlign: TextAlign.start,
+                                      style: R.textStyle
+                                          .regularMetropolis()
+                                          .copyWith(
+                                            fontSize:
+                                                FetchPixels.getPixelHeight(
+                                                    13.5),
+                                          ),
+                                    ),
                                     getVerSpace(FetchPixels.getPixelHeight(15)),
                                   ],
                                 ),

@@ -35,22 +35,22 @@ class _LoginSignupState extends State<LoginSignup> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Material(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(10),
                 color: R.colors.theme.withOpacity(0.2),
                 child: TabBar(
                   indicatorPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      EdgeInsets.symmetric(vertical: 5, horizontal: 05),
                   // indicatorWeight: 5,
                   // overlayColor: MaterialStateProperty.resolveWith(
                   //     (states) => R.colors.fillColor),
                   // padding: EdgeInsets.symmetric(horizontal: 40),
-                  splashBorderRadius: BorderRadius.circular(50),
+                  splashBorderRadius: BorderRadius.circular(10),
                   labelColor: R.colors.blackColor,
                   labelPadding: EdgeInsets.symmetric(vertical: 5),
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerHeight: 0,
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(10),
                     color: R.colors.whiteColor,
                   ),
                   tabs: [

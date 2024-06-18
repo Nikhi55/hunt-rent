@@ -285,13 +285,15 @@ class _FeaturedWidget1State extends State<FeaturedWidget1> {
     return Consumer<AuthProvider>(
       builder: (context, auth, child) {
         double? totalPrice = auth.userModel.cart!
-            .firstWhere((element) => element.productId == widget.model.docId,
-                orElse: () => UserCart(
-                      startDate: Timestamp.now(),
-                      endDate: Timestamp.now(),
-                      productId: widget.model.docId,
-                      price: double.tryParse(widget.model.productPrice!) ?? 0.0,
-                    ))
+            .firstWhere(
+              (element) => element.productId == widget.model.docId,
+              orElse: () => UserCart(
+                startDate: Timestamp.now(),
+                endDate: Timestamp.now(),
+                productId: widget.model.docId,
+                price: double.tryParse(widget.model.productPrice!) ?? 0.0,
+              ),
+            )
             .price;
 
         return InkWell(
@@ -428,7 +430,7 @@ class _FeaturedWidget1State extends State<FeaturedWidget1> {
                                                     FetchPixels.getPixelHeight(
                                                         12))),
                                 getVerSpace(FetchPixels.getPixelWidth(5)),
-                                Text("QR $totalPrice",
+                                Text("QR ${totalPrice?.toInt()}",
                                     style: R.textStyle
                                         .semiBoldMetropolis()
                                         .copyWith(

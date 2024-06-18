@@ -57,12 +57,12 @@ class WishList extends StatelessWidget {
                 // mainAxisAlignment: MainAxisAlignment.end,
                 // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  getVerSpace(FetchPixels.getPixelHeight(10)),
+                  // getVerSpace(FetchPixels.getPixelHeight(0)),
                   filteredProducts.isEmpty
                       ? Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               getAssetImage(
                                 R.images.emptywhislist,
@@ -86,19 +86,18 @@ class WishList extends StatelessWidget {
                             ],
                           ),
                         )
-                      : SizedBox(),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        ProductModel model = filteredProducts[index];
-                        return FeaturedWidget(
-                          model: model,
-                          isCart: true,
-                        );
-                      },
-                    ),
-                  )
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: filteredProducts.length,
+                            itemBuilder: (context, index) {
+                              ProductModel model = filteredProducts[index];
+                              return FeaturedWidget(
+                                model: model,
+                                isCart: true,
+                              );
+                            },
+                          ),
+                        ),
                 ]),
           ),
         );

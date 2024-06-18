@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CartModel {
-  dynamic? docId;
+  dynamic docId;
   String? customerName;
   String? customerId;
   String? productId;
   double? productPrice;
   String? vendorId;
-  Timestamp? startDate;
-  Timestamp? endDate;
+  DateTime? startDate;
+  DateTime? endDate;
   String? orderStatus;
   String? submitStatus;
   String? address;

@@ -32,25 +32,26 @@ class _CategoryViewState extends State<CategoryView> {
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, ProductProvider>(
       builder: (context, auth, product, child) {
+        // Fetch all products based on renter or buyer
         List<ProductModel> filteredProducts =
             auth.isRenter ? auth.rentNowProducts : auth.buyNowProducts;
 
-        filteredProducts = filteredProducts
-            .where((element) => auth.userModel.favrt!.contains(element.docId))
-            .toList();
+        print('Initial Products: ${filteredProducts.length}');
 
-        List<ProductModel> finalFilteredProducts = filteredProducts;
+        // Apply additional filters based on category and subcategory
         if (product.isSubClicked) {
-          finalFilteredProducts = filteredProducts
+          filteredProducts = filteredProducts
               .where((element) =>
                   element.subCategoryName == product.selectedSubCatName)
               .toList();
         } else if (product.selectedCatName != "All") {
-          finalFilteredProducts = filteredProducts
+          filteredProducts = filteredProducts
               .where(
                   (element) => element.categoryName == product.selectedCatName)
               .toList();
         }
+
+        print('After Category filter: ${filteredProducts.length}');
         return Column(
           children: [
             getVerSpace(FetchPixels.getPixelHeight(10)),
@@ -59,28 +60,13 @@ class _CategoryViewState extends State<CategoryView> {
               Column(
                 children: [
                   getVerSpace(FetchPixels.getPixelHeight(10)),
-                  // TextFormField(
-                  //   controller: searchController,
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       searchQuery = value;
-                  //       performSearch(product: product);
-                  //     });
-                  //   },
-                  //   decoration: R.decorations.textFormFieldDecoration(
-                  //       Icon(Icons.search_rounded), "search"),
-                  // ),
                   Row(
                     children: [
                       InkWell(
                           onTap: () {
-                            Get.offAll(() => DashboardView(
-                                  index: 0,
-                                ));
+                            Get.offAll(() => DashboardView(index: 0));
                           },
-                          child: Icon(
-                            Icons.arrow_back_ios_rounded,
-                          )),
+                          child: Icon(Icons.arrow_back_ios_rounded)),
                       getHorSpace(FetchPixels.getPixelWidth(10)),
                       Center(
                           child: Text(
@@ -90,23 +76,12 @@ class _CategoryViewState extends State<CategoryView> {
                             .copyWith(fontSize: FetchPixels.getPixelHeight(16)),
                       )),
                       Spacer(),
-                      Spacer(),
-                      // InkWell(
-                      //   onTap: () {
-                      //     Get.to(() => ForumView());
-                      //   },
-                      //   child: getAssetImage(R.images.chatoutline,
-                      //       // color: R.colors.buttonText,
-                      //       scale: 4.5),
-                      // ),
-                      // getHorSpace(FetchPixels.getPixelWidth(10)),
                       InkWell(
                         onTap: () {
                           Get.to(() => WishList());
                         },
                         child: getAssetImage(
                           R.images.favOutline,
-                          // color: R.colors.buttonText,
                           scale: 4.5,
                         ),
                       ),
@@ -116,7 +91,6 @@ class _CategoryViewState extends State<CategoryView> {
                           Get.to(() => NotificationsView());
                         },
                         child: getAssetImage(R.images.notificationOutline,
-                            // color: R.colors.buttonText,
                             scale: 4.5),
                       ),
                       getHorSpace(FetchPixels.getPixelWidth(10)),
@@ -132,10 +106,8 @@ class _CategoryViewState extends State<CategoryView> {
                             padding: EdgeInsets.only(
                               left: FetchPixels.getPixelWidth(10),
                               right: FetchPixels.getPixelWidth(10),
-                              top: FetchPixels.getPixelHeight(
-                                  10), // Adjust the top padding
-                              bottom: FetchPixels.getPixelHeight(
-                                  10), // Adjust the bottom padding
+                              top: FetchPixels.getPixelHeight(10),
+                              bottom: FetchPixels.getPixelHeight(10),
                             ),
                             child: TextFormField(
                               controller: searchController,
@@ -151,7 +123,6 @@ class _CategoryViewState extends State<CategoryView> {
                                     .copyWith(
                                         fontSize: 16,
                                         color: R.colors.fillColor),
-                                // hintText: "Search...",
                                 prefixIcon: searchController.text == ""
                                     ? Icon(Icons.search_rounded)
                                     : InkWell(
@@ -164,11 +135,9 @@ class _CategoryViewState extends State<CategoryView> {
                                       ),
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 8, horizontal: 10),
-                                // Adjust the vertical content padding
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                 ),
-
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                   borderSide: BorderSide(
@@ -183,29 +152,6 @@ class _CategoryViewState extends State<CategoryView> {
                       )
                     ],
                   ),
-                  // Row(
-                  //   children: [
-                  //
-                  //     getHorSpace(FetchPixels.getPixelWidth(15)),
-                  //     Expanded(
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only( right: FetchPixels.getPixelWidth(10)),
-                  //         child: TextFormField(
-                  //           controller: searchController,
-                  //           onChanged: (value) {
-                  //             searchQuery = value;
-                  //             performSearch(product: product);
-                  //             setState(() {});
-                  //
-                  //           },
-                  //           decoration: R.decorations.textFormFieldDecoration(
-                  //               null, "Search",suffix: Icon(Icons.search_rounded)),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     // getHorSpace(FetchPixels.getPixelWidth(10)),
-                  //   ],
-                  // ),
                   getVerSpace(FetchPixels.getPixelHeight(10)),
                   SizedBox(
                     height: FetchPixels.getPixelHeight(35),
@@ -215,9 +161,7 @@ class _CategoryViewState extends State<CategoryView> {
                           onTap: () {
                             auth.isClicked = !auth.isClicked;
                             if (product.isSubClicked == true) {
-                              print("sub clicked ${product.isSubClicked}");
                               product.isSubClicked = false;
-
                               product.update();
                             }
                             auth.update();
@@ -241,7 +185,6 @@ class _CategoryViewState extends State<CategoryView> {
                       ],
                     ),
                   ),
-
                   getVerSpace(FetchPixels.getPixelHeight(10)),
                   SizedBox(
                     height: FetchPixels.getPixelHeight(35),
@@ -262,7 +205,6 @@ class _CategoryViewState extends State<CategoryView> {
                 children: [
                   auth.isClicked
                       ? Container(
-                          // height: FetchPixels.getPixelHeight(600),
                           width: FetchPixels.getPixelWidth(100),
                           color: R.colors.whiteColor,
                           child: ListView.builder(
@@ -274,7 +216,6 @@ class _CategoryViewState extends State<CategoryView> {
                                     .length
                                 : product.subCatList.length,
                             itemBuilder: (context, index) {
-                              // CategoriesModel model = product.subCatList[index];
                               CategoriesModel model =
                                   (product.selectedCatName != 'All')
                                       ? product.subCatList
@@ -283,88 +224,76 @@ class _CategoryViewState extends State<CategoryView> {
                                               product.selectedCatId)
                                           .toList()[index]
                                       : product.subCatList[index];
-                              return drawerText(
-                                index,
-                                auth,
-                                model,
-                                product,
-                              );
+                              return drawerText(index, auth, model, product);
                             },
                           ),
                         )
                       : SizedBox(),
                   Expanded(
-                    child: searchController.text != ""
-                        ? SizedBox(
-                            height: FetchPixels.getPixelHeight(290),
-                            child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 200,
-                                      childAspectRatio: 0.65,
-                                      crossAxisSpacing:
-                                          FetchPixels.getPixelWidth(10),
-                                      mainAxisSpacing:
-                                          FetchPixels.getPixelHeight(5)),
-                              itemCount: filteredProducts.length,
-                              itemBuilder: (context, index) {
-                                ProductModel model = filteredProducts[index];
-                                return getPaddingWidget(
-                                  EdgeInsets.only(
-                                      right: FetchPixels.getPixelWidth(10)),
-                                  CateWidget(
-                                    model: model,
-                                    isSpecial: false,
-                                    index: index,
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        : GridView.builder(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: FetchPixels.getPixelWidth(20)),
+                    child: searchController.text.isNotEmpty
+                        ? GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 250,
-                                    childAspectRatio:
-                                        auth.isClicked ? 0.65 : 0.65,
+                                    maxCrossAxisExtent: 200,
+                                    childAspectRatio: 0.65,
                                     crossAxisSpacing:
                                         FetchPixels.getPixelWidth(10),
                                     mainAxisSpacing:
                                         FetchPixels.getPixelHeight(5)),
-                            itemCount: finalFilteredProducts.length,
-                            itemBuilder: (BuildContext ctx, index) {
-                              ProductModel model = finalFilteredProducts[index];
-                              return CateWidget(
-                                model: model,
-                                isSpecial: false,
-                                index: index,
+                            itemCount: filteredProducts.length,
+                            itemBuilder: (context, index) {
+                              ProductModel model = filteredProducts[index];
+                              return getPaddingWidget(
+                                EdgeInsets.only(
+                                    right: FetchPixels.getPixelWidth(10)),
+                                CateWidget(
+                                  model: model,
+                                  isSpecial: false,
+                                  index: index,
+                                ),
                               );
                             },
+                          )
+                        : Container(
+                            child: GridView.builder(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: FetchPixels.getPixelWidth(20),
+                              ),
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 250,
+                                childAspectRatio: auth.isClicked ? 0.65 : 0.65,
+                                crossAxisSpacing: FetchPixels.getPixelWidth(10),
+                                mainAxisSpacing: FetchPixels.getPixelHeight(15),
+                              ),
+                              itemCount: filteredProducts.length,
+                              itemBuilder: (BuildContext ctx, index) {
+                                ProductModel model = filteredProducts[index];
+                                return CateWidget(
+                                  model: model,
+                                  isSpecial: false,
+                                  index: index,
+                                );
+                              },
+                            ),
                           ),
                   ),
                 ],
               ),
             ),
-
-            // Wrap(
-            //   spacing: FetchPixels.getPixelWidth(10),
-            //   runSpacing: FetchPixels.getPixelHeight(5),
-            //   alignment: WrapAlignment.center,
-            //   children: List.generate(10, (index) {
-            //     return CateWidget();
-            //   }),
-            // ),
-            getVerSpace(FetchPixels.getPixelHeight(100))
+            // getVerSpace(FetchPixels.getPixelHeight(100)),
           ],
         );
       },
     );
   }
 
-  drawerText(index, AuthProvider auth, CategoriesModel model,
-      ProductProvider product) {
+  drawerText(
+    index,
+    AuthProvider auth,
+    CategoriesModel model,
+    ProductProvider product,
+  ) {
     return InkWell(
       onTap: () {
         auth.currentDrawerSelected = index;
@@ -375,7 +304,7 @@ class _CategoryViewState extends State<CategoryView> {
       child: Container(
         decoration: BoxDecoration(
           color: auth.currentDrawerSelected == index
-              ? R.colors.blackColor
+              ? R.colors.theme
               : R.colors.whiteColor,
           border: Border(
               bottom: BorderSide(color: R.colors.blackColor.withOpacity(0.3))),
@@ -387,10 +316,11 @@ class _CategoryViewState extends State<CategoryView> {
           child: Text(
             model.categoryName ?? "",
             style: R.textStyle.regularMetropolis().copyWith(
-                fontSize: FetchPixels.getPixelHeight(15),
-                color: auth.currentDrawerSelected == index
-                    ? R.colors.whiteColor
-                    : R.colors.blackColor),
+                  fontSize: FetchPixels.getPixelHeight(15),
+                  color: auth.currentDrawerSelected == index
+                      ? R.colors.whiteColor
+                      : R.colors.blackColor,
+                ),
           ),
         ),
       ),

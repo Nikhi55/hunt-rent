@@ -159,7 +159,7 @@ class MyOrderHistory extends StatelessWidget {
                               //       flex: 1,
                               //       child: Column(
                               //         crossAxisAlignment: product.productType ==
-                              //                     ProductsTypes.sell.name ||
+                              //                     \.sell.name ||
                               //                 product.productType ==
                               //                     ProductsTypes.sold.name
                               //             ? CrossAxisAlignment.end
@@ -298,7 +298,7 @@ class MyOrderWidgets extends StatelessWidget {
                               borderRadius: BorderRadius.circular(
                                   FetchPixels.getPixelHeight(5))),
                           child: Text(
-                            "${pro.earningsList[index!].endDate!.toDate().difference(pro.earningsList[index!].startDate!.toDate()).inDays} days remaining",
+                            "${pro.earningsList[index!].endDate!.difference(pro.earningsList[index!].startDate!).inDays} days remaining",
                             style: R.textStyle.regularMetropolis().copyWith(
                                 fontSize: FetchPixels.getPixelHeight(12)),
                           ),

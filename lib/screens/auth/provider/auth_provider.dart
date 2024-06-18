@@ -222,7 +222,7 @@ class AuthProvider extends ChangeNotifier {
     startLoader();
     userModel = (await getUserFromDB(email!))!;
     await updateFcm(email);
-    log("user found = ${userModel?.toJson()}");
+    log("user found = ${userModel.toJson()}");
     Get.offAllNamed(Routes.dashboardView);
 
     // if (_userModel?.status == UserStatus.active.index) {

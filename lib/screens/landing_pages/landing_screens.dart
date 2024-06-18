@@ -58,7 +58,8 @@ class _LandingScreensState extends State<LandingScreens> {
                   ),
                   getAssetImage(
                     R.images.landing04,
-                    boxFit: BoxFit.fill,
+                    height: 400,
+                    // boxFit: BoxFit.contain,
                   ),
                 ],
               ),

@@ -285,8 +285,7 @@ class EarningsView extends StatelessWidget {
             ],
           ),
           subtitle: Text(
-            DateFormat('MMM dd yyyy | hh : mm a')
-                .format(model.endDate!.toDate()),
+            DateFormat('MMM dd yyyy | hh : mm a').format(model.endDate!),
             style: TextStyle(
               fontSize: 14,
             ),

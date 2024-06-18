@@ -12,6 +12,7 @@ import 'package:hunt_and_rent/forum/model/forum_model.dart';
 import 'package:hunt_and_rent/forum/widget/post_widget.dart';
 import 'package:hunt_and_rent/screens/auth/model/user_model.dart';
 import 'package:hunt_and_rent/screens/auth/provider/auth_provider.dart';
+import 'package:hunt_and_rent/screens/auth/provider/selecteddate.dart';
 import 'package:hunt_and_rent/screens/dashboard/dashboard_view.dart';
 import 'package:hunt_and_rent/screens/dashboard/home/provider/product_provider.dart';
 import 'package:hunt_and_rent/widgets/my_button.dart';
@@ -178,7 +179,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    "QR $totalPrice",
+                                    "QR ${totalPrice.toInt()}",
                                     style: R.textStyle
                                         .semiBoldMetropolis()
                                         .copyWith(
@@ -388,18 +389,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         // SizedBox(
                                         //     height: FetchPixels.getPixelHeight(5)),
                                         SizedBox(
-                                            height:
-                                                FetchPixels.getPixelHeight(10)),
+                                          height:
+                                              FetchPixels.getPixelHeight(10),
+                                        ),
                                         widget.model.productType == "sell"
                                             ? SizedBox()
                                             : SizedBox(
-                                                height:
-                                                    FetchPixels.getPixelHeight(
-                                                        420),
+                                                // height:
+                                                //     FetchPixels.getPixelHeight(
+                                                //         0),
                                                 child: CalendarScreen(
                                                   productPrice: totalPrice,
                                                   onDatesSelected:
                                                       onDatesSelected,
+                                                  model: widget.model,
                                                 ),
                                               ),
                                         Divider(),
@@ -664,13 +667,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                                 ),
                                                                 child: Center(
                                                                   child: Text(
-                                                                      "Save & Post",
-                                                                      style: R
-                                                                          .textStyle
-                                                                          .mediumMetropolis()
-                                                                          .copyWith(
-                                                                              color: R.colors.whiteColor,
-                                                                              fontSize: FetchPixels.getPixelHeight(15))),
+                                                                    "Save & Post",
+                                                                    style: R
+                                                                        .textStyle
+                                                                        .mediumMetropolis()
+                                                                        .copyWith(
+                                                                          color: R
+                                                                              .colors
+                                                                              .whiteColor,
+                                                                          fontSize:
+                                                                              FetchPixels.getPixelHeight(15),
+                                                                        ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
@@ -709,7 +717,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                     CircularProgressIndicator(
                                                         color: R.colors.theme))
                                             : MyButton(
-                                                // isPrefixIcon: true,
                                                 onTap: () async {
                                                   if (!auth.isLoggedIn) {
                                                     Get.snackbar(
@@ -720,8 +727,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                     );
                                                     return;
                                                   }
-                                                  print(auth.userModel.cart!
-                                                      .map((e) => e.toJson()));
+
                                                   if (auth.userModel.cart!
                                                       .where((element) =>
                                                           element.productId ==
@@ -729,57 +735,83 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                       .toList()
                                                       .isNotEmpty) {
                                                     Get.snackbar(
-                                                        backgroundColor:
-                                                            R.colors.whiteColor,
-                                                        "",
-                                                        "This Item is Already in Cart");
+                                                      backgroundColor:
+                                                          R.colors.whiteColor,
+                                                      "",
+                                                      "This Item is Already in Cart",
+                                                    );
                                                     auth.update();
                                                   } else {
-                                                    // double pricePerDay =
-                                                    //     double.tryParse(widget.model
-                                                    //             .productPrice!) ??
-                                                    //         0.0;
-                                                    // int numberOfDays =
-                                                    //     auth.selectedDates.length;
+                                                    final selectedDatesProvider =
+                                                        Provider.of<
+                                                                SelectedDatesProvider>(
+                                                            context,
+                                                            listen: false);
+                                                    final selectedDates =
+                                                        selectedDatesProvider
+                                                            .selectedDates;
+
+                                                    DateTime startDate;
+                                                    DateTime endDate;
+
+                                                    if (widget.model
+                                                            .productType ==
+                                                        "rent") {
+                                                      if (selectedDates
+                                                          .isEmpty) {
+                                                        Get.snackbar(
+                                                          "Error",
+                                                          "Please select dates before adding the item to the cart",
+                                                          backgroundColor: R
+                                                              .colors
+                                                              .whiteColor,
+                                                        );
+                                                        return;
+                                                      }
+                                                      startDate =
+                                                          selectedDates.first;
+                                                      endDate =
+                                                          selectedDates.last;
+                                                    } else {
+                                                      startDate =
+                                                          DateTime.now();
+                                                      endDate = DateTime.now();
+                                                    }
+
                                                     double updatedTotalPrice =
-                                                        totalPrice;
-                                                    // print(
-                                                    //     "Price Per Day: $pricePerDay");
-                                                    // // print(
-                                                    // //     // "Selected Dates: $selectedDates");
-                                                    // print(
-                                                    //     "Number of Days: $numberOfDays");
-                                                    // print(
-                                                    //     "Updated total price: $updatedTotalPrice");
+                                                        totalPrice; // Assuming you have calculated this earlier
+
                                                     UserCart userCart =
                                                         UserCart(
-                                                      startDate: Timestamp
-                                                          .fromDate(auth
-                                                                  .startDate ??
-                                                              DateTime.now()),
-                                                      endDate: Timestamp
-                                                          .fromDate(auth
-                                                                  .endDate ??
-                                                              DateTime.now()),
+                                                      startDate:
+                                                          Timestamp.fromDate(
+                                                              startDate),
+                                                      endDate:
+                                                          Timestamp.fromDate(
+                                                              endDate),
                                                       productId:
                                                           widget.model.docId,
                                                       price: updatedTotalPrice,
                                                     );
+
                                                     auth.userModel.cart!
                                                         .add(userCart);
                                                     await auth.updateUser(
                                                         auth.userModel);
+
                                                     Get.snackbar(
-                                                        backgroundColor:
-                                                            R.colors.whiteColor,
-                                                        "",
-                                                        icon: Icon(
-                                                          Icons.check_circle,
-                                                          color: Colors.green,
-                                                        ),
-                                                        "Your Item is Successfully Added in Cart");
+                                                      backgroundColor:
+                                                          R.colors.whiteColor,
+                                                      "",
+                                                      icon: Icon(
+                                                        Icons.check_circle,
+                                                        color: Colors.green,
+                                                      ),
+                                                      "Your Item is Successfully Added in Cart",
+                                                    );
                                                     Get.to(() => DashboardView(
                                                         index: 2));
+
                                                     print(
                                                         "userCart Value ${auth.userModel.cart!.map((e) => e.toJson())}");
                                                     auth.update();
@@ -791,9 +823,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                     ? "Go To Cart"
                                                     : "Add to Cart",
                                               ),
+
                                         SizedBox(
-                                            height:
-                                                FetchPixels.getPixelHeight(20)),
+                                          height:
+                                              FetchPixels.getPixelHeight(20),
+                                        ),
                                       ],
                                     ),
                             ],
@@ -820,8 +854,12 @@ class CalendarScreen extends StatefulWidget {
   final void Function(List<DateTime> selectedDates, double totalPrice)
       onDatesSelected;
   final double productPrice;
+  final ProductModel model;
 
-  CalendarScreen({required this.onDatesSelected, required this.productPrice});
+  CalendarScreen(
+      {required this.onDatesSelected,
+      required this.productPrice,
+      required this.model});
 
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
@@ -832,6 +870,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   List<DateTime> _selectedDays = [];
+  DateTime? _lastSelectedDay;
 
   @override
   void initState() {
@@ -853,18 +892,54 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       if (_selectedDays.contains(selectedDay)) {
-        _selectedDays.remove(selectedDay);
+        // Deselect all dates and reset price to initial product price
+        _selectedDays.clear();
+        _lastSelectedDay = null;
       } else {
-        _selectedDays.add(selectedDay);
+        // Ensure only consecutive dates can be selected
+        if (_lastSelectedDay == null ||
+            selectedDay
+                .isAtSameMomentAs(_lastSelectedDay!.add(Duration(days: 1))) ||
+            selectedDay.isBefore(_lastSelectedDay!)) {
+          _selectedDays.add(selectedDay);
+          _lastSelectedDay = selectedDay;
+        } else {
+          // Deselect all dates and reset price to initial product price if consecutive condition is not met
+          _selectedDays.clear();
+          _lastSelectedDay = null;
+        }
       }
-    });
-    _selectedEvents.value = _getEventsForDay(selectedDay);
 
-    double totalPrice = calculateTotalPrice(_selectedDays.length);
-    widget.onDatesSelected(_selectedDays, totalPrice);
+      // Recalculate total price based on the current state of _selectedDays
+      double totalPrice;
+      if (_selectedDays.isEmpty) {
+        // Set totalPrice to initial product price if no dates are selected
+        totalPrice = double.tryParse(widget.model.productPrice!) ?? 0.0;
+      } else {
+        totalPrice = calculateTotalPrice(_selectedDays.length);
+      }
+
+      final productProvider =
+          Provider.of<ProductProvider>(context, listen: false);
+      productProvider.setTotalPrice(totalPrice);
+
+      // Update the selected dates in the SelectedDatesProvider
+      final selectedDatesProvider =
+          Provider.of<SelectedDatesProvider>(context, listen: false);
+      selectedDatesProvider.setSelectedDates(_selectedDays);
+
+      // Debugging
+      print("Selected Days: $_selectedDays");
+      print("Total Price: $totalPrice");
+    });
+
+    _selectedEvents.value = _getEventsForDay(selectedDay);
   }
 
   double calculateTotalPrice(int selectedDatesCount) {
+    if (selectedDatesCount == 0) {
+      return widget.productPrice;
+    }
     double totalPrice = widget.productPrice;
     if (selectedDatesCount > 1) {
       totalPrice += (selectedDatesCount - 1) *
@@ -878,9 +953,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: TableCalendar<Event>(
+        headerStyle: HeaderStyle(
+          titleCentered: true,
+          formatButtonVisible: false,
+        ),
         focusedDay: _focusedDay,
         firstDay: DateTime(2000),
         lastDay: DateTime(2050),
+        enabledDayPredicate: (day) {
+          // Allow selection of today or a consecutive date only, and allow deselection
+          return !day.isBefore(DateTime.now()) &&
+              (_lastSelectedDay == null ||
+                  day.isAtSameMomentAs(
+                      _lastSelectedDay!.add(Duration(days: 1))) ||
+                  _selectedDays.contains(day));
+        },
         calendarFormat: _calendarFormat,
         selectedDayPredicate: (day) {
           return _selectedDays.contains(day);
@@ -892,11 +979,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
           });
         },
         calendarStyle: CalendarStyle(
-          selectedDecoration: ShapeDecoration(
-            color: R.colors.theme,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+          selectedDecoration: BoxDecoration(
+            color: R.colors.theme, // Use the theme's primary color
+            shape: BoxShape.circle,
+          ),
+          disabledTextStyle: TextStyle(
+            color: Colors.grey.shade600, // Text color for disabled dates
+          ),
+          selectedTextStyle: TextStyle(
+            color: Colors.white, // Text color for selected dates
           ),
         ),
       ),

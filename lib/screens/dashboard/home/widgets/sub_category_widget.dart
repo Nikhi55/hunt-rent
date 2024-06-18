@@ -83,6 +83,12 @@ class CategoryFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, ProductProvider>(
       builder: (context, auth, product, child) {
+        List<ProductModel> filteredProducts =
+            auth.isRenter ? auth.rentNowProducts : auth.buyNowProducts;
+        List<ProductModel> categoryFilteredProducts = filteredProducts
+            .where((element) => element.subCategoryName == model.categoryName)
+            .toList();
+
         return Scaffold(
           appBar: AppBar(
               title: Text(model.categoryName!),
@@ -109,48 +115,24 @@ class CategoryFilter extends StatelessWidget {
                 getVerSpace(FetchPixels.getPixelHeight(15)),
                 Expanded(
                   child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 250,
-                          childAspectRatio: 0.65,
-                          crossAxisSpacing: FetchPixels.getPixelWidth(10),
-                          mainAxisSpacing: FetchPixels.getPixelHeight(5)),
-                      itemCount: product.products
-                          .where((element) => ((element.subCategoryName ==
-                                  model.categoryName) &&
-                              (element.productType == ProductsTypes.sell.name ||
-                                  element.productType ==
-                                      ProductsTypes.rent.name)))
-                          .length,
-                      itemBuilder: (BuildContext ctx, index) {
-                        ProductModel model1 = product.products
-                            .where((element) => ((element.subCategoryName ==
-                                    model.categoryName) &&
-                                (element.productType ==
-                                        ProductsTypes.sell.name ||
-                                    element.productType ==
-                                        ProductsTypes.rent.name)))
-                            .toList()[index];
-                        return CateWidget(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 250,
+                        childAspectRatio: 0.65,
+                        crossAxisSpacing: FetchPixels.getPixelWidth(10),
+                        mainAxisSpacing: FetchPixels.getPixelHeight(5)),
+                    itemCount: categoryFilteredProducts.length,
+                    itemBuilder: (BuildContext ctx, index) {
+                      ProductModel model1 = categoryFilteredProducts[index];
+                      return getPaddingWidget(
+                        EdgeInsets.only(right: FetchPixels.getPixelWidth(10)),
+                        CateWidget(
                           model: model1,
                           isSpecial: false,
                           index: index,
-                        );
-                      }),
-                  // ListView.builder(
-                  //   itemCount: product.products.where((element) => element.subCategoryName == model.categoryName).length,
-                  //   scrollDirection: Axis.horizontal,
-                  //   itemBuilder: (context, index) {
-                  //     ProductModel model1 = product.products.where((element) => element.subCategoryName == model.categoryName).toList()[index];
-                  //     return getPaddingWidget(
-                  //       EdgeInsets.only(right: FetchPixels.getPixelWidth(10)),
-                  //       CateWidget(
-                  //         model: model1,
-                  //         isSpecial: false,
-                  //         index: index,
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

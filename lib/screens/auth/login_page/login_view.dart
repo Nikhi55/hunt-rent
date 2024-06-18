@@ -116,7 +116,7 @@ class LoginView extends StatelessWidget {
                           )
                           .copyWith(
                               focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       width: 2, color: R.colors.theme)),
                               border: OutlineInputBorder(
@@ -125,15 +125,15 @@ class LoginView extends StatelessWidget {
                                   color: R.colors.fillColor,
                                 ),
                                 borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(50)),
+                                    FetchPixels.getPixelHeight(10)),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       width: 2, color: R.colors.fillColor)),
                               disabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(50)),
+                                    FetchPixels.getPixelHeight(10)),
                                 borderSide: BorderSide(
                                     width: 2, color: R.colors.fillColor),
                               )),
@@ -176,7 +176,7 @@ class LoginView extends StatelessWidget {
                                   )))
                           .copyWith(
                               focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       width: 2, color: R.colors.theme)),
                               border: OutlineInputBorder(
@@ -185,15 +185,15 @@ class LoginView extends StatelessWidget {
                                   color: R.colors.fillColor,
                                 ),
                                 borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(50)),
+                                    FetchPixels.getPixelHeight(10)),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                       width: 2, color: R.colors.fillColor)),
                               disabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(50)),
+                                    FetchPixels.getPixelHeight(10)),
                                 borderSide: BorderSide(
                                     width: 2, color: R.colors.fillColor),
                               )),

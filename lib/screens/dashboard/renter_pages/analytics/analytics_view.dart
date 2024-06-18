@@ -274,7 +274,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     thisMonthBookings = provider.earningsList
         .where((element) =>
             element.vendorId == FirebaseAuth.instance.currentUser!.email)
-        .where((element) => element.endDate!.toDate().month == now.month)
+        .where((element) => element.endDate!.month == now.month)
         .length;
     print("thisMonthBookings $thisMonthBookings");
     setState(() {});
@@ -286,7 +286,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     previousMonthBookings = provider.earningsList
         .where((element) =>
             element.vendorId == FirebaseAuth.instance.currentUser!.email)
-        .where((element) => element.endDate!.toDate().month == now.month - 1)
+        .where((element) => element.endDate!.month == now.month - 1)
         .length;
     print("previousMonthBookings $previousMonthBookings");
     setState(() {});

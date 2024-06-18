@@ -72,19 +72,23 @@ class _DashboardViewState extends State<DashboardView> {
             ),
           ),
           bottomNavigationBar: ConvexAppBar(
+            height: 60,
             style: TabStyle.fixedCircle,
             backgroundColor: Colors.white,
             activeColor: R.colors.theme,
             color: Colors.black,
             items: [
-              TabItem(icon: Icons.home, title: 'Home'),
-              TabItem(icon: Icons.category, title: 'Categories'),
               TabItem(
-                icon:
-                    _centerIcon(authProvider.isRenter ? "RENT NOW" : "BUY NOW"),
+                icon: Icons.home_outlined,
+                title: 'Home',
+              ),
+              TabItem(icon: Icons.category_outlined, title: 'Categories'),
+              TabItem(
+                icon: _centerIcon(
+                    authProvider.isRenter ? "BUY\nNOW" : "RENT\nNOW"),
               ), // Middle item with action
-              TabItem(icon: Icons.shopping_cart, title: 'Cart'),
-              TabItem(icon: Icons.person, title: 'Profile'),
+              TabItem(icon: Icons.shopping_cart_outlined, title: 'Cart'),
+              TabItem(icon: Icons.person_2_outlined, title: 'Profile'),
             ],
             initialActiveIndex: currentPage < 2 ? currentPage : currentPage + 1,
             onTap: (int index) {
@@ -109,11 +113,11 @@ class _DashboardViewState extends State<DashboardView> {
 
   Widget _centerIcon(String text) {
     return Container(
-      height: 48,
-      width: 48,
+      height: 55,
+      width: 55,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: R.colors.buyrentbutton,
+        color: Colors.deepPurple[100],
       ),
       child: Center(
         child: Text(
@@ -122,7 +126,7 @@ class _DashboardViewState extends State<DashboardView> {
           style: TextStyle(
             color: Colors.black,
             fontSize: 10,
-            fontWeight: FontWeight.bold,
+            // fontWeight: FontWeight.bold,
           ),
         ),
       ),
